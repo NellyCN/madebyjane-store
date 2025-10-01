@@ -30,6 +30,14 @@ dist-ssr
 .env
 .env.local
 
+# Backend Java
+backend/target/
+backend/.gradle/
+backend/*.jar
+backend/.classpath
+backend/.project
+backend/.settings/
+
 # Database
 *.db
 *.sqlite
