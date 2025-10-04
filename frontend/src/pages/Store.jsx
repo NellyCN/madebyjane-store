@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import React from "react";
 import ProductCard from "../components/ProductCard";
 
@@ -20,7 +22,7 @@ const mockProducts = [
   {id: 8,
     name: "Top crochet conchas marinas",
     categoria: "Tejidos Crochet (Algodón Pima)",
-    price: 119.9,
+    price: 120,
     stock: 8,
     talla: "S-M",
     medidas: "Busto 86-94 cm",
@@ -30,12 +32,31 @@ const mockProducts = [
       "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg"},
 ]
 
-function Tienda() {
+// function Tienda() {
+//   return (
+//     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+//       {mockProducts.map(p => <ProductCard key={p.id} product={p} />)}
+//     </div>
+//   )
+// }
+
+// export default Tienda
+
+function Store() {
+  // const location = useLocation()
+  
+  // useEffect(() => {
+  //   console.log('🛍️ Página Tienda cargada - Ruta:', location.pathname)
+  // }, [location])
+  
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-      {mockProducts.map(p => <ProductCard key={p.id} product={p} />)}
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="container mx-auto px-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Nuestra Tienda</h1>
+        <p className="text-gray-600">Próximamente: Catálogo de productos</p>
+      </div>
     </div>
   )
 }
 
-export default Tienda
+export default Store

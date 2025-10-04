@@ -8,7 +8,7 @@ const data = [
   { name: "Bikini", stock: 9 },
 ]
 
-function Inventario() {
+function Inventory() {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Inventario</h1>
@@ -17,11 +17,11 @@ function Inventario() {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="stock" fill="#3b82f6" />
+          <Bar dataKey="stock" fill="#1a89c9ff" />
         </BarChart>
       </ResponsiveContainer>
     </div>
   )
 }
 
-export default Inventario
+export default Inventory
