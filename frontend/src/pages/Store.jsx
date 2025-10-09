@@ -1,62 +1,196 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import React from "react";
-import ProductCard from "../components/ProductCard";
-
-const mockProducts = [
-  { id: 1, name: "Collar artesanal",
-    categoria: "Tejidos Crochet (Algodón Pima)",
-    price: 37, 
-    stock: 8,
-    talla: "S-M",
-    medidas: "Busto 86-94 cm",
-    descripcion:
-      "Top tejido a crochet en hilo de algodón pima peruano, suave y respirable. Inspirado en las conchas del mar.",
-    image: "https://i.pinimg.com/1200x/89/78/f0/8978f006b43b2ea385b5b8f338599a48.jpg" },
-  { id: 2, name: "Pulsera tejida", price: 15, image: "https://i.pinimg.com/1200x/6e/05/18/6e0518676f5201fca7e001d496a66f06.jpg" },
-  { id: 3, name: "Aretes tejidos", price: 25, image: "https://i.pinimg.com/1200x/dd/5b/af/dd5baf8db10a4aade15e59d70c7b54e0.jpg" },
-  { id: 4, name: "Bolso Tejido", price: 150, image: "https://i.pinimg.com/1200x/cb/99/9a/cb999a971ffe75859bc42285c7f79ae0.jpg" },
-  { id: 5, name: "Bikini Tejido",price: 195, image: "https://i.pinimg.com/736x/53/26/87/5326878f5339916eaa8a4909089c9aa3.jpg" },
-  { id: 6, name: "Top Tejido", price: 125, image: "https://i.pinimg.com/736x/57/80/dd/5780dd8cae668995c5483616dcff1d5e.jpg" },
-  { id: 7, name: "Conjunto Tejido", price: 475, image: "https://i.pinimg.com/736x/23/a6/3e/23a63e532c71ecd5754300c25b6b4b0b.jpg" },
-  {id: 8,
-    name: "Top crochet conchas marinas",
-    categoria: "Tejidos Crochet (Algodón Pima)",
-    price: 120,
-    stock: 8,
-    talla: "S-M",
-    medidas: "Busto 86-94 cm",
-    descripcion:
-      "Top tejido a crochet en hilo de algodón pima peruano, suave y respirable. Inspirado en las conchas del mar.",
-    image:
-      "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg"},
-]
-
-// function Tienda() {
-//   return (
-//     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-//       {mockProducts.map(p => <ProductCard key={p.id} product={p} />)}
-//     </div>
-//   )
-// }
-
-// export default Tienda
+import { useState, useMemo } from 'react'
+import { ProductCard, Badge, Button } from '../components/ui'
+import { mockProducts, categories } from '../data/mockProducts'
 
 function Store() {
-  // const location = useLocation()
+  // Estado para filtros y búsqueda
+
+  // Estados existentes
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [searchTerm, setSearchTerm] = useState('')
   
-  // useEffect(() => {
-  //   console.log('🛍️ Página Tienda cargada - Ruta:', location.pathname)
-  // }, [location])
+  // 🆕 NUEVO ESTADO para ordenamiento
+  const [sortBy, setSortBy] = useState('featured')
   
+  /**
+   * Función para manejar agregar al carrito
+   */
+  const handleAddToCart = (product) => {
+    console.log('🛒 Producto agregado:', product)
+    // Temporal: alerta visual
+    alert(`¡${product.name} agregado al carrito!`)
+    // Aquí luego integrarás con el Context del carrito
+  }
+
+  /**
+   * 🆕 FUNCIÓN DE ORDENAMIENTO
+   * useMemo para optimizar - solo recalcula cuando cambian los datos o el orden
+   */
+  const filteredAndSortedProducts = useMemo(() => {
+    // Filtrar productos por categoría y búsqueda
+    const filtered = mockProducts.filter(product => {
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      return matchesCategory && matchesSearch
+    })
+
+    // Luego: Ordenar según el criterio seleccionado
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low-high':
+          return a.price - b.price // Menor precio primero
+          
+        case 'price-high-low':
+          return b.price - a.price // Mayor precio primero
+          
+        case 'name-asc':
+          return a.name.localeCompare(b.name) // A-Z
+          
+        case 'name-desc':
+          return b.name.localeCompare(a.name) // Z-A
+          
+        case 'stock-high-low':
+          return b.stock - a.stock // Mayor stock primero
+
+        case 'featured':
+        default:
+          {
+            // Orden por destacados: primero los que tienen stock, luego por tags especiales
+            const aHasStock = a.stock > 0
+            const bHasStock = b.stock > 0
+            
+            if (aHasStock && !bHasStock) return -1
+            if (!aHasStock && bHasStock) return 1
+            
+            // Si ambos tienen stock, los "nuevos" y "populares" primero
+            const aIsFeatured = a.tags?.includes('nuevo') || a.tags?.includes('popular')
+            const bIsFeatured = b.tags?.includes('nuevo') || b.tags?.includes('popular')
+            
+            if (aIsFeatured && !bIsFeatured) return -1
+            if (!aIsFeatured && bIsFeatured) return 1
+            
+            return 0 // Mantener orden original
+          }
+      }    
+  })
+}, [selectedCategory, searchTerm, sortBy])
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Nuestra Tienda</h1>
-        <p className="text-gray-600">Próximamente: Catálogo de productos</p>
+      <div className="container mx-auto px-4 py-8">
+        
+        {/* Header de la Tienda */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            Mar & Naturaleza
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Tejidos a crochet inspirados en el océano, accesorios con vibra natural 
+            y pijamas de peluche para inviernos acogedores.
+          </p>
+        </div>
+
+        {/* Filtros y Búsqueda */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+            
+            {/* Barra de Búsqueda */}
+            <div className="w-full md:w-auto">
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Filtros por Categoría */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map(category => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "primary" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category.id)}
+                >
+                  {category.name}
+                </Button>
+              ))}
+            </div>
+
+          </div>
+        </div>
+
+        {/* Contador de Resultados y Ordenamiento */}
+        <div className="flex justify-between items-center mb-6">
+          <p className="text-gray-600">
+            Mostrando <span className="font-semibold">{filteredAndSortedProducts.length}</span> de <span className="font-semibold">{mockProducts.length}</span> productos
+          </p>
+          
+          {/* 🆕 ORDENAMIENTO FUNCIONAL */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 whitespace-nowrap">Ordenar por:</span>
+            <select 
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            >
+              <option value="featured">Destacados</option>
+              <option value="price-low-high">Precio: Menor a Mayor</option>
+              <option value="price-high-low">Precio: Mayor a Menor</option>
+              <option value="name-asc">Nombre: A-Z</option>
+              <option value="name-desc">Nombre: Z-A</option>
+              <option value="stock-high-low">Stock: Mayor primero</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Grid de Productos */}
+        {filteredAndSortedProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredAndSortedProducts.map(product => (
+              <ProductCard 
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        ) : (
+          /* Estado vacío - cuando no hay resultados */
+          <div className="text-center py-12">
+            <div className="text-gray-400 text-6xl mb-4">🛍️</div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              No se encontraron productos
+            </h3>
+            <p className="text-gray-500 mb-4">
+              Intenta con otros términos de búsqueda o categorías
+            </p>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setSearchTerm('')
+                setSelectedCategory('all')
+                setSortBy('featured')
+              }}
+            >
+              Mostrar todos los productos
+            </Button>
+          </div>
+        )}
+
       </div>
     </div>
   )
+  // return (
+  //   <div className="min-h-screen bg-gray-50 pt-20">
+  //     <div className="container mx-auto px-4">
+  //       <h1 className="text-3xl font-bold text-gray-800 mb-8">Nuestra Tienda</h1>
+  //       <p className="text-gray-600">Próximamente: Catálogo de productos</p>
+  //     </div>
+  //   </div>
+  // )
 }
 
 export default Store

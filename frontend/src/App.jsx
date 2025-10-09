@@ -5,16 +5,11 @@ import Admin from './pages/Admin'
 import Inventory from './pages/Inventory'
 import Blog from './pages/Blog'
 import Cart from './pages/Cart' 
+import ComponentDemo from './pages/ComponentDemo'  // 🆕 AGREGAR
 import NotFound from './pages/NotFound'
-import './App.css'
+
 
 function App() {
-  // const location = useLocation()
-  
-  // 🐛 Verificar que las rutas se configuran bien
-  // console.log('🚀 App montada - Ruta:', location.pathname)
-
- 
   return (
     // <div className="min-h-screen bg-gray-50 text-gray-900">
     <div className="App">
@@ -29,7 +24,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/cart" element={<Cart />} />
-        
+          <Route path="/demo" element={<ComponentDemo />} />
           {/* Ruta 404 - debe ir al final */}
           <Route path="*" element={<NotFound />} />
         </Routes>

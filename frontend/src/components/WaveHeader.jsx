@@ -55,6 +55,13 @@ function WaveHeader() {
       mobileLabel: 'Cart (0)', // More descriptive in mobile
       icon: ShoppingCart,
       isActive: () => isActive('/cart')
+    },
+    { 
+      to: '/demo', 
+      label: 'Demo', 
+      mobileLabel: 'Demo',
+      icon: FileText, // o cualquier icono
+      isActive: () => isActive('/demo')
     }
   ]
 
