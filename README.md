@@ -3,6 +3,7 @@
 <div align="center">
 
 ![MadeByJane](https://img.shields.io/badge/Status-🚧_Active_Development-orange)
+
 ![React](https://img.shields.io/badge/Frontend-React_Vite-61DAFB?logo=react)
 ![Spring Boot](https://img.shields.io/badge/Backend-Spring_Boot-6DB33F?logo=springboot)
 ![Tailwind](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwindcss)
@@ -87,11 +88,15 @@ This is currently a personal project in active development. The codebase is evol
 ## 📄 License
 This project is proprietary and developed for MadeByJane business.
 
+This project is owned by Nelly Cumpa. and developed for MadeByJane business.
+
+
 <div align="center">
-Follow our development journey!
+
+>>> Follow our development journey!
 More updates coming soon...
 
-</div> ```
+</div>
 
 
 
