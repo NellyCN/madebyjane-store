@@ -8,7 +8,7 @@
 ![Spring Boot](https://img.shields.io/badge/Backend-Spring_Boot-6DB33F?logo=springboot)
 ![Tailwind](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwindcss)
 
-**A beautiful e-commerce platform for handmade crochet and natural accessories**
+**"A beautiful e-commerce platform for handmade crochet and natural accessories"**
 
 </div>
 
@@ -86,10 +86,7 @@ cd backend
 This is currently a personal project in active development. The codebase is evolving rapidly as we build out the core features.
 
 ## 📄 License
-This project is proprietary and developed for MadeByJane business.
-
-This project is owned by Nelly Cumpa. and developed for MadeByJane business.
-
+This project is being developed by Nelly Cumpa and is being developed for MadeByJane business.
 
 <div align="center">
 
