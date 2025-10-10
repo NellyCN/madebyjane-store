@@ -1,11 +1,8 @@
+// frontend/src/components/ui/ProductCard.jsx
 import Card from './Card'
 import Button from './Button'
 import Badge from './Badge'
 
-/**
- * Product Card component specifically for e-commerce products
- * @param {Object} props.product - Product data
- */
 function ProductCard({ product, onAddToCart }) {
   const { 
     name, 
@@ -13,16 +10,28 @@ function ProductCard({ product, onAddToCart }) {
     description, 
     stock, 
     category,
-    image 
+    image,
+    tags = []  // 🆕 Agregar tags
   } = product
 
   const isLowStock = stock < 5
   const isOutOfStock = stock === 0
 
+  // 🆕 Determinar si es destacado
+  // const isFeatured = tags.includes('nuevo') || tags.includes('popular')
+  // 🆕 VERSIÓN MÁS ROBUSTA para determinar si es destacado
+  const isFeatured = () => {
+    if (!tags || !Array.isArray(tags)) return false
+    return tags.some(tag => {
+      const cleanTag = tag.toString().toLowerCase().trim()
+      return cleanTag === 'nuevo' || cleanTag === 'popular'
+    })
+  }
+
   return (
     <Card className="overflow-hidden">
       {/* Product Image */}
-      <div className="aspect-square bg-gray-200 flex items-center justify-center">
+      <div className="aspect-square bg-gray-200 flex items-center justify-center relative">
         {image ? (
           <img 
             src={image} 
@@ -31,6 +40,15 @@ function ProductCard({ product, onAddToCart }) {
           />
         ) : (
           <div className="text-gray-400 text-sm">Imagen no disponible</div>
+        )}
+        
+        {/* 🆕 Badge de Destacado */}
+        {isFeatured && (
+          <div className="absolute top-2 left-2">
+            <Badge variant="success" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg border border-cyan-600 font-bold">
+              ⭐ Destacado
+            </Badge>
+          </div>
         )}
       </div>
 

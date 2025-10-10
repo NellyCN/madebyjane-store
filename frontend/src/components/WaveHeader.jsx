@@ -156,7 +156,7 @@ function WaveHeader() {
     </nav> 
 
     {/* CSS for slide down animation */}
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes slideDown {
           from {
             opacity: 0;
