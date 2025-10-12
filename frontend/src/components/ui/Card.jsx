@@ -1,9 +1,34 @@
 /**
- * Reusable Card container component with shadows and borders
- * @param {ReactNode} props.children - Card content
- * @param {string} props.className - Additional classes
+ * Contenedor con estilo de tarjeta para agrupar contenido relacionado
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {React.ReactNode} props.children - Contenido de la tarjeta
+ * @param {string} [props.className=''] - Clases CSS adicionales
+ * @param {Object} [props.rest] - Otras propiedades HTML
+ * 
+ * @example
+ * // Card simple con contenido
+ * <Card className="p-6">
+ *   <h3>Título de la card</h3>
+ *   <p>Contenido descriptivo aquí.</p>
+ * </Card>
+ * 
+ * @example
+ * // Card con elementos interactivos
+ * <Card className="p-4">
+ *   <h4>Configuración</h4>
+ *   <Button variant="primary">Guardar</Button>
+ * </Card>
+ * 
+ * @example
+ * // Card para grid responsivo
+ * <Card className="p-4 hover:shadow-md transition-shadow">
+ *   Contenido interactivo
+ * </Card>
  */
-function Card({ children, className = '', ...props }) {
+
+export function Card({ children, className = '', ...props }) {
   return (
     <div 
       className={`

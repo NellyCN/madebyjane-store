@@ -1,9 +1,41 @@
-// frontend/src/components/ui/ProductCard.jsx
+/**
+ * Tarjeta de producto para mostrar en grids de tienda con información completa y acciones
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {Object} props.product - Datos del producto a mostrar
+ * @param {number} props.product.id - ID único del producto
+ * @param {string} props.product.name - Nombre del producto
+ * @param {number} props.product.price - Precio del producto
+ * @param {string} props.product.description - Descripción del producto
+ * @param {number} props.product.stock - Cantidad disponible en stock
+ * @param {string} props.product.category - Categoría del producto
+ * @param {string} [props.product.image] - URL opcional de la imagen del producto
+ * @param {string[]} [props.product.tags] - Etiquetas opcionales del producto
+ * @param {function} props.onAddToCart - Función llamada al agregar el producto al carrito
+ * @param {string} [props.className=''] - Clases CSS adicionales
+ * 
+ * @example
+ * // Uso básico en la tienda
+ * <ProductCard 
+ *   product={productData}
+ *   onAddToCart={(product) => addToCart(product)}
+ * />
+ * 
+ * @example
+ * // Con clases personalizadas para grid
+ * <ProductCard 
+ *   product={featuredProduct}
+ *   onAddToCart={handleAddToCart}
+ *   className="hover:scale-105 transition-transform"
+ * />
+ */
+
 import Card from './Card'
 import Button from './Button'
 import Badge from './Badge'
 
-function ProductCard({ product, onAddToCart }) {
+export function ProductCard({ product, onAddToCart }) {
   const { 
     name, 
     price, 

@@ -1,9 +1,32 @@
 /**
- * Reusable Badge component for status, categories, etc.
- * @param {string} props.variant - 'default' | 'success' | 'warning' | 'error'
- * @param {ReactNode} props.children - Badge content
+ * Etiqueta pequeña para mostrar estados, categorías o información destacada
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {'default' | 'success' | 'warning' | 'error'} [props.variant='default'] - Variante de color del badge
+ * @param {React.ReactNode} props.children - Contenido del badge
+ * @param {string} [props.className=''] - Clases CSS adicionales
+ * 
+ * @example
+ * // Badge para estado de stock
+ * <Badge variant="success">En Stock</Badge>
+ * 
+ * @example
+ * // Badge de advertencia
+ * <Badge variant="warning">Bajo Stock</Badge>
+ * 
+ * @example
+ * // Badge de categoría
+ * <Badge variant="default">Tejidos Crochet</Badge>
+ * 
+ * @example
+ * // Badge personalizado
+ * <Badge variant="error" className="uppercase">
+ *   Agotado
+ * </Badge>
  */
-function Badge({ variant = 'default', children, className = '' }) {
+
+export function Badge({ variant = 'default', children, className = '' }) {
   const variants = {
     default: 'bg-gray-100 text-gray-800',
     success: 'bg-green-100 text-green-800',

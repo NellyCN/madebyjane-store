@@ -1,14 +1,51 @@
 /**
- * Reusable Input component -Styled form fields
- * @param {string} props.type - Input type
- * @param {string} props.label - Label text
- * @param {string} props.error - Error message
- * @param {string} props.className - Additional classes
+ * Campo de entrada de texto con soporte para diferentes tipos y estados de validación
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {string} [props.label] - Etiqueta descriptiva del campo
+ * @param {string} [props.type='text'] - Tipo de input (text, email, password, etc.)
+ * @param {string} [props.placeholder] - Texto placeholder
+ * @param {string} [props.value] - Valor controlado del input
+ * @param {function} [props.onChange] - Función llamada al cambiar el valor
+ * @param {string} [props.error] - Mensaje de error para validación
+ * @param {boolean} [props.disabled=false] - Estado deshabilitado
+ * @param {string} [props.className=''] - Clases CSS adicionales
+ * @param {Object} [props.rest] - Otras propiedades HTML
+ * 
+ * @example
+ * // Input básico con label
+ * <Input 
+ *   label="Email"
+ *   type="email" 
+ *   placeholder="tu@email.com"
+ * />
+ * 
+ * @example
+ * // Input con estado de error
+ * <Input 
+ *   label="Contraseña"
+ *   type="password"
+ *   error="La contraseña debe tener al menos 8 caracteres"
+ * />
+ * 
+ * @example
+ * // Input deshabilitado
+ * <Input 
+ *   label="Campo no editable"
+ *   disabled
+ *   value="Valor fijo"
+ * />
  */
+
 function Input({ 
   type = 'text',
   label,
-  error,
+  placeholder, 
+  value, 
+  onChange, 
+  error, 
+  disabled = false,
   className = '',
   ...props 
 }) {

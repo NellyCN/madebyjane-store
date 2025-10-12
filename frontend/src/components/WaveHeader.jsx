@@ -1,11 +1,13 @@
-import { Link, useLocation } from 'react-router-dom'
-import { ShoppingCart, Home, FileText, Package, Settings, Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingCart, Home, FileText, Package, Settings, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { useCart } from "../hooks/useCart";
 
 function WaveHeader() {
     const location = useLocation()  // 🆕 Para saber la página activa
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)  // 🆕 Estado para menú móvil
-
+    const { itemCount } = useCart()  // 🆕 USAR EL CARRITO
+  
   /**
    * Determina si una ruta está activa
    * Maneja el caso especial de '/' que redirige a '/store'
@@ -51,8 +53,8 @@ function WaveHeader() {
     },
     { 
       to: '/cart', 
-      label: '(0)',  // El número vendrá del carrito después
-      mobileLabel: 'Cart (0)', // More descriptive in mobile
+      label: `(${itemCount})`,  // 🆕 MOSTRAR CONTADOR ACTUALIZADO
+      mobileLabel:  `Cart (${itemCount})`, // More descriptive in mobile
       icon: ShoppingCart,
       isActive: () => isActive('/cart')
     },
@@ -74,85 +76,85 @@ function WaveHeader() {
         {/* Main nav bar */}
         <div className="flex justify-between items-center py-3">{/* py-3 padding y márgenes- Header principal*/}
         
-        {/* Logo - smaller on mobile 
-        📱 MÓVIL + 🖥️ MD + 💻 LG+ - aplica diferentes estilos por breakpoint*/}
-        <h1 className="text-lg sm:text-xl md:text-2xl font-bold truncate">
-          MadeByJane
-        </h1>
+          {/* Logo - smaller on mobile 
+          📱 MÓVIL + 🖥️ MD + 💻 LG+ - aplica diferentes estilos por breakpoint*/}
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold truncate">
+            MadeByJane
+          </h1>
         
-        {/* Desktop Navigation - hidden on mobile */}
-        <ul className="hidden md:flex gap-4 lg:gap-6">
-        {/* <ul className="flex gap-6"> */}
-          {navItems.map((item) => {
-            const IconComponent = item.icon
-            const active = item.isActive()
-            
-            return (
-              <li key={item.to}>
-                <Link 
-                  to={item.to}
-                  className={`
-                    flex items-center gap-1 lg:gap-2 transition-all duration-200 font-medium px-2 py-1 rounded-lg text-sm lg:text-base
-                    ${active 
-                      ? 'text-white bg-cyan-700 shadow-inner' 
-                      : 'text-cyan-100 hover:text-white hover:bg-cyan-500'
-                    }
-                  `}
-                >
-                  <IconComponent size={16} className="flex-shrink-0" />
-                  <span className="whitespace-nowrap">{item.label}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-
-        {/* 📱 Mobile Menu Button (default) - se aplica a TODOS los tamaños */}
-        <button 
-          className="md:hidden p-1 rounded-lg hover:bg-cyan-500 transition"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>  
-      
-      
-       {/* Mobile Menu - More compact design */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-cyan-700 border-t border-cyan-500 animate-slideDown">
-          <ul className="py-2 flex flex-col"> {/* py-2 padding y márgenes-Menú móvil*/}
-            {navItems.map((item, index) => {
+          {/* Desktop Navigation - hidden on mobile */}
+          <ul className="hidden md:flex gap-4 lg:gap-6">
+          {/* <ul className="flex gap-6"> */}
+            {navItems.map((item) => {
               const IconComponent = item.icon
               const active = item.isActive()
               
               return (
-                // Separadores entre items en lugar de gap grande
-                <li key={item.to} className={index !== navItems.length - 1 ? 'border-b border-cyan-600' : ''}>
-
+                <li key={item.to}>
                   <Link 
                     to={item.to}
-                    onClick={closeMobileMenu}
                     className={`
-                      flex items-center gap-3 p-2 transition-all duration-150 font-medium
+                      flex items-center gap-1 lg:gap-2 transition-all duration-200 font-medium px-2 py-1 rounded-lg text-sm lg:text-base
                       ${active 
-                        ? 'bg-cyan-800 text-white' 
-                        : 'text-cyan-100 hover:bg-cyan-600 hover:text-white'
+                        ? 'text-white bg-cyan-700 shadow-inner' 
+                        : 'text-cyan-100 hover:text-white hover:bg-cyan-500'
                       }
                     `}
                   >
-
-                    {/* Iconos reducidos para móvil */}
-                    <IconComponent size={18} className="flex-shrink-0" />
-
-                    <span className="text-sm whitespace-nowrap">{item.mobileLabel}</span>
+                    <IconComponent size={16} className="flex-shrink-0" />
+                    <span className="whitespace-nowrap">{item.label}</span>
                   </Link>
                 </li>
-              )
+              );
             })}
           </ul>
-        </div>
-      )}
+
+          {/* 📱 Mobile Menu Button (default) - se aplica a TODOS los tamaños */}
+          <button 
+            className="md:hidden p-1 rounded-lg hover:bg-cyan-500 transition"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>  
+      
+      
+        {/* Mobile Menu - More compact design */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-cyan-700 border-t border-cyan-500 animate-slideDown">
+            <ul className="py-2 flex flex-col"> {/* py-2 padding y márgenes-Menú móvil*/}
+              {navItems.map((item, index) => {
+                const IconComponent = item.icon
+                const active = item.isActive()
+                
+                return (
+                  // Separadores entre items en lugar de gap grande
+                  <li key={item.to} className={index !== navItems.length - 1 ? 'border-b border-cyan-600' : ''}>
+
+                    <Link 
+                      to={item.to}
+                      onClick={closeMobileMenu}
+                      className={`
+                        flex items-center gap-3 p-2 transition-all duration-150 font-medium
+                        ${active 
+                          ? 'bg-cyan-800 text-white' 
+                          : 'text-cyan-100 hover:bg-cyan-600 hover:text-white'
+                        }
+                      `}
+                    >
+
+                      {/* Iconos reducidos para móvil */}
+                      <IconComponent size={18} className="flex-shrink-0" />
+
+                      <span className="text-sm whitespace-nowrap">{item.mobileLabel}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
     </nav> 
 
     {/* CSS for slide down animation */}
@@ -172,7 +174,7 @@ function WaveHeader() {
         }
       `}</style>
     </header>
-  )
+  );
 }
 
 export default WaveHeader

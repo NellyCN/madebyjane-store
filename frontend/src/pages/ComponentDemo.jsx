@@ -1,4 +1,3 @@
-// frontend/src/pages/ComponentDemo.jsx
 import { Button, Input, Card, Badge, ProductCard } from '../components/ui'
 
 function ComponentDemo() {
@@ -119,6 +118,29 @@ function ComponentDemo() {
           </div>
         </section>
 
+        {/* Sección: Loaders/Spinners */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Loaders</h2>
+          <div className="flex gap-4">
+            {/* Si tienes un componente Loading */}
+            <div className="text-center">
+              <p className="text-sm text-gray-600 mb-2">Spinner pequeño</p>
+              {/* <Loading size="sm" /> */}
+            </div>
+          </div>
+        </section>
+
+        {/* Sección: Modales/Dialogs */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Modales</h2>
+          <Button 
+            variant="outline"
+            onClick={() => alert('Aquí se abriría un modal')}
+          >
+            Abrir Modal de Ejemplo
+          </Button>
+        </section>
+        
       </div>
     </div>
   )

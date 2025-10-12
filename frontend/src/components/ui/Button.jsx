@@ -1,15 +1,36 @@
 /**
- * Reusable Button component with multiple variants-All App
- * @param {Object} props
- * @param {ReactNode} props.children - Button content
- * @param {string} props.variant - 'primary' | 'secondary' | 'danger' | 'outline'
- * @param {string} props.size - 'sm' | 'md' | 'lg'
- * @param {boolean} props.disabled - Disabled state
- * @param {function} props.onClick - Click handler
- * @param {string} props.className - Additional classes
+ * Botón reutilizable para acciones en la interfaz con variantes de estilo y tamaño
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {'primary' | 'secondary' | 'outline' | 'danger'} [props.variant='primary'] - Variante visual del botón
+ * @param {'sm' | 'md' | 'lg'} [props.size='md'] - Tamaño del botón
+ * @param {boolean} [props.disabled=false] - Estado deshabilitado
+ * @param {function} [props.onClick] - Función llamada al hacer click
+ * @param {React.ReactNode} props.children - Contenido del botón
+ * @param {string} [props.className=''] - Clases CSS adicionales
+ * @param {Object} [props.rest] - Otras propiedades HTML
+ * 
+ * @example
+ * // Botón primario estándar
+ * <Button variant="primary" onClick={handleSave}>
+ *   Guardar Cambios
+ * </Button>
+ * 
+ * @example
+ * // Botón outline pequeño deshabilitado
+ * <Button variant="outline" size="sm" disabled>
+ *   No disponible
+ * </Button>
+ * 
+ * @example
+ * // Botón de peligro con clases adicionales
+ * <Button variant="danger" className="w-full">
+ *   Eliminar
+ * </Button>
  */
 
-function Button({ 
+export function Button({ 
   children, 
   variant = 'primary', 
   size = 'md', 

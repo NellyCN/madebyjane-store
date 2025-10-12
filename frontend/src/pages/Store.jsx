@@ -1,25 +1,33 @@
 import { useState, useMemo } from 'react'
 import { ProductCard, Badge, Button } from '../components/ui'
+import { useCart } from '../hooks/useCart'
 import { mockProducts, categories } from '../data/mockProducts'
 
 function Store() {
-  // Estado para filtros y búsqueda
-
-  // Estados existentes
+  // Estado existentes para filtros y búsqueda
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   
   // 🆕 NUEVO ESTADO para ordenamiento
   const [sortBy, setSortBy] = useState('featured')
-  
+  const { addToCart } = useCart()  // 🆕 USAR EL CARRITO
+
   /**
    * Función para manejar agregar al carrito
    */
   const handleAddToCart = (product) => {
-    console.log('🛒 Producto agregado:', product)
-    // Temporal: alerta visual
-    alert(`¡${product.name} agregado al carrito!`)
-    // Aquí luego integrarás con el Context del carrito
+     addToCart(product)
+  
+    // 🆕 Feedback visual temporal (puedes mejorar esto después)
+    const button = document.querySelector(`[data-product-id="${product.id}"]`)
+    if (button) {
+      button.textContent = '¡Agregado!'
+      button.classList.add('bg-green-500')
+      setTimeout(() => {
+        button.textContent = 'Agregar al Carrito'
+        button.classList.remove('bg-green-500')
+      }, 1500)
+    }
   }
 
   /**
@@ -183,14 +191,7 @@ function Store() {
       </div>
     </div>
   )
-  // return (
-  //   <div className="min-h-screen bg-gray-50 pt-20">
-  //     <div className="container mx-auto px-4">
-  //       <h1 className="text-3xl font-bold text-gray-800 mb-8">Nuestra Tienda</h1>
-  //       <p className="text-gray-600">Próximamente: Catálogo de productos</p>
-  //     </div>
-  //   </div>
-  // )
 }
+
 
 export default Store
