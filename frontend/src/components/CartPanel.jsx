@@ -4,6 +4,13 @@ import { Button } from './ui';
 function CartPanel() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart();
 
+  // Cálculos adicionales
+  const subtotal = total;
+  const igv = subtotal * 0.18;
+  const shippingCost = subtotal > 100 ? 0 : 15; // Envío gratis sobre $100
+  const finalTotal = subtotal + shippingCost;
+
+
   if (items.length === 0) {
     return (
       <div className="text-center py-12">
@@ -35,7 +42,7 @@ function CartPanel() {
       </div>
 
       {/* Lista de Productos */}
-      <div className="space-y-4">
+      <div className="space-y-4 mb-8">
         {items.map(item => (
           <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             <div className="flex items-center gap-4">
@@ -89,13 +96,42 @@ function CartPanel() {
         ))}
       </div>
 
-      {/* Total y Checkout */}
-      <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-lg font-semibold">Total:</span>
-          <span className="text-2xl font-bold text-cyan-600">${total}</span>
+      {/* 🆕 RESUMEN DE COMPRA */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold mb-4">Resumen de Compra</h3>
+        
+        <div className="space-y-3 mb-6">
+          <div className="flex justify-between">
+            <span>Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>IGV (18%):</span>
+            <span>${igv.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Envío:</span>
+            <span>
+              {shippingCost === 0 ? (
+                <span className="text-green-600">GRATIS</span>
+              ) : (
+                `$${shippingCost.toFixed(2)}`
+              )}
+            </span>
+          </div>
+          {shippingCost > 0 && subtotal < 100 && (
+            <p className="text-sm text-green-600 text-center py-2 bg-green-50 rounded">
+              ¡Faltan ${(100 - subtotal).toFixed(2)} para envío gratis!
+            </p>
+          )}
+          <hr />
+          <div className="flex justify-between text-lg font-bold">
+            <span>Total:</span>
+            <span className="text-cyan-600">${finalTotal.toFixed(2)}</span>
+          </div>
         </div>
         
+        {/* 🆕 BOTONES DENTRO DEL MISMO CARD */}
         <div className="flex gap-3">
           <Button 
             variant="outline" 

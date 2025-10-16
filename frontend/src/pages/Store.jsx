@@ -2,22 +2,29 @@ import { useState, useMemo } from 'react'
 import { ProductCard, Badge, Button } from '../components/ui'
 import { useCart } from '../hooks/useCart'
 import { mockProducts, categories } from '../data/mockProducts'
+import { useNavigate } from 'react-router-dom';
 
 function Store() {
+  const navigate = useNavigate();
   // Estado existentes para filtros y búsqueda
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
-  
-  // 🆕 NUEVO ESTADO para ordenamiento
-  const [sortBy, setSortBy] = useState('featured')
-  const { addToCart } = useCart()  // 🆕 USAR EL CARRITO
+  const [sortBy, setSortBy] = useState('featured')  // 🆕 Estado para ordenamiento
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { items, total, removeFromCart } = useCart();
 
+   // 🆕 CÁLCULOS
+   const subtotal = total;
+  // const igv = subtotal * 0.18; // 18% IGV
+  const shippingCost = subtotal > 100 ? 0 : 15;
+  const finalTotal = subtotal + shippingCost;
+  const remainingForFreeShipping = 100 - subtotal;
+  const { addToCart } = useCart()  // 🆕 USAR EL CARRITO
   /**
    * Función para manejar agregar al carrito
    */
   const handleAddToCart = (product) => {
-     addToCart(product)
-  
+    addToCart(product)
     // 🆕 Feedback visual temporal (puedes mejorar esto después)
     const button = document.querySelector(`[data-product-id="${product.id}"]`)
     if (button) {
@@ -30,10 +37,8 @@ function Store() {
     }
   }
 
-  /**
-   * 🆕 FUNCIÓN DE ORDENAMIENTO
-   * useMemo para optimizar - solo recalcula cuando cambian los datos o el orden
-   */
+  // 🆕 FUNCIÓN DE ORDENAMIENTO
+  // useMemo para optimizar - solo recalcula cuando cambian los datos o el orden
   const filteredAndSortedProducts = useMemo(() => {
     // Filtrar productos por categoría y búsqueda
     const filtered = mockProducts.filter(product => {
@@ -45,42 +50,28 @@ function Store() {
     // Luego: Ordenar según el criterio seleccionado
     return filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'price-low-high':
-          return a.price - b.price // Menor precio primero
-          
-        case 'price-high-low':
-          return b.price - a.price // Mayor precio primero
-          
-        case 'name-asc':
-          return a.name.localeCompare(b.name) // A-Z
-          
-        case 'name-desc':
-          return b.name.localeCompare(a.name) // Z-A
-          
-        case 'stock-high-low':
-          return b.stock - a.stock // Mayor stock primero
-
+        case 'price-low-high': return a.price - b.price // Menor precio primero
+        case 'price-high-low': return b.price - a.price // Mayor precio primero
+        case 'name-asc': return a.name.localeCompare(b.name) // A-Z
+        case 'name-desc': return b.name.localeCompare(a.name) // Z-A
+        case 'stock-high-low': return b.stock - a.stock // Mayor stock primero
         case 'featured':
         default:
           {
             // Orden por destacados: primero los que tienen stock, luego por tags especiales
             const aHasStock = a.stock > 0
             const bHasStock = b.stock > 0
-            
             if (aHasStock && !bHasStock) return -1
             if (!aHasStock && bHasStock) return 1
-            
             // Si ambos tienen stock, los "nuevos" y "populares" primero
             const aIsFeatured = a.tags?.includes('nuevo') || a.tags?.includes('popular')
             const bIsFeatured = b.tags?.includes('nuevo') || b.tags?.includes('popular')
-            
             if (aIsFeatured && !bIsFeatured) return -1
             if (!aIsFeatured && bIsFeatured) return 1
-            
             return 0 // Mantener orden original
           }
       }    
-  })
+    })
 }, [selectedCategory, searchTerm, sortBy])
 
   return (
@@ -89,9 +80,7 @@ function Store() {
         
         {/* Header de la Tienda */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Mar & Naturaleza
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Mar & Naturaleza</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Tejidos a crochet inspirados en el océano, accesorios con vibra natural 
             y pijamas de peluche para inviernos acogedores.
@@ -126,15 +115,15 @@ function Store() {
                 </Button>
               ))}
             </div>
-
           </div>
         </div>
 
         {/* Contador de Resultados y Ordenamiento */}
         <div className="flex justify-between items-center mb-6">
           <p className="text-gray-600">
-            Mostrando <span className="font-semibold">{filteredAndSortedProducts.length}</span> de <span className="font-semibold">{mockProducts.length}</span> productos
+            Mostrando <span className="font-semibold">{filteredAndSortedProducts.length}</span> productos
           </p>
+
           
           {/* 🆕 ORDENAMIENTO FUNCIONAL */}
           <div className="flex items-center gap-2">
@@ -187,11 +176,119 @@ function Store() {
             </Button>
           </div>
         )}
-
       </div>
+
+      {/* MINI CART Sidebar */}
+      {isCartOpen && (
+        <div className="fixed right-0 top-20 h-[calc(100vh-5rem)] w-80 bg-white shadow-xl border-l z-50">
+          <div className="p-4 border-b">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-semibold">Tu Carrito ({items.length})</h3>
+              <button 
+                onClick={() => setIsCartOpen(false)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* 🆕 LÍNEA DE ENVÍO GRATIS DEBAJO DEL TÍTULO */}
+            {shippingCost > 0 && remainingForFreeShipping > 0 ? (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-2">
+                <p className="text-xs text-amber-800 text-center">
+                  <span className="font-semibold">¡Faltan ${remainingForFreeShipping.toFixed(2)}</span> para envío gratis
+                </p>
+              </div>
+            ) : shippingCost === 0 ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-2">
+                <p className="text-xs text-green-800 text-center font-semibold">
+                  🎉 ¡Tienes envío gratis!
+                </p>
+              </div>
+            ) : null}
+          </div>
+                              
+          {/* Lista de productos */}
+          <div className="p-4 overflow-y-auto h-[calc(100%-180px)]">
+            {items.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">Tu carrito está vacío</p>
+            ) : (
+              items.map(item => (
+                <div key={item.id} className="flex gap-3 py-3 border-b">
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    className="w-12 h-12 object-cover rounded flex-shrink-0" 
+                  />
+                  <div className="flex-grow min-w-0">
+                    <p className="text-sm font-medium truncate">{item.name}</p>
+                    <p className="text-xs text-gray-600">${item.price} x {item.quantity}</p>
+                    <p className="text-xs font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+                  <button 
+                    onClick={() => removeFromCart(item.id)}
+                    className="text-red-500 text-xs hover:text-red-700 flex-shrink-0"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+          
+          {/* 🆕 RESUMEN */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
+            <div className="space-y-2 text-sm mb-3">
+              <div className="flex justify-between">
+                <span>Subtotal:</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Envío:</span>
+                <span>
+                  {shippingCost === 0 ? (
+                    <span className="text-green-600 font-semibold">GRATIS</span>
+                  ) : (
+                    `$${shippingCost.toFixed(2)}`
+                  )}
+                </span>
+              </div>
+              <hr />
+              <div className="flex justify-between font-semibold text-base">
+                <span>Total:</span>
+                <span className="text-cyan-600">${finalTotal.toFixed(2)}</span>
+              </div>
+            </div>
+            
+            <Button 
+              variant="primary" 
+              className="w-full"
+              onClick={() => {
+                setIsCartOpen(false);
+                navigate('/cart');
+              }}
+              disabled={items.length === 0}
+            >
+              {items.length === 0 ? 'Carrito Vacío' : 'Ver Carrito Completo'}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Botón flotante */}
+      <button 
+        onClick={() => setIsCartOpen(!isCartOpen)}
+        className="fixed right-4 top-24 bg-cyan-600 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 transition z-40"
+      >
+        🛒 
+        {items.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+            {items.length}
+          </span>
+        )}
+      </button>
     </div>
   )
 }
-
 
 export default Store
