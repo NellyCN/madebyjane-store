@@ -19,7 +19,7 @@ function Store() {
   const { items, total, removeFromCart, addToCart } = useCart();
 
    // 🆕 CÁLCULOS
-   const subtotal = total;
+  const subtotal = total;
   // const igv = subtotal * 0.18; // 18% IGV
   const shippingCost = subtotal > 100 ? 0 : 15;
   const finalTotal = subtotal + shippingCost;
@@ -167,7 +167,8 @@ const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
             {/* 🆕 BOTÓN LOAD MORE */}
             {visibleProducts < filteredAndSortedProducts.length && (
               <div className="text-center mt-8">
-                <Button variant="outline" 
+                <Button 
+                  variant="outline" 
                   onClick={() => setVisibleProducts(prev => prev + productsPerLoad)}
                   className="px-8"
                 >
@@ -177,27 +178,94 @@ const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
             )}
           </>    
         ) : (
-          /* Estado vacío - cuando no hay resultados */
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">🛍️</div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">
-              No se encontraron productos
-            </h3>
-            <p className="text-gray-500 mb-4">
-              Intenta con otros términos de búsqueda o categorías
-            </p>
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setSearchTerm('')
-                setSelectedCategory('all')
-                setSortBy('featured')
-                setVisibleProducts(8) // Resetear también la cantidad visible (load more)
-              }}
-            >
-              Mostrar todos los productos
-            </Button>
-          </div>
+          /* 🆕 ESTADOS VACÍO MEJORADOS - Diferentes mensajes según la situación */
+          
+          /* 🔍 Estado vacío por BÚSQUEDA */
+          displayedProducts.length === 0 && searchTerm ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                No encontramos "{searchTerm}"
+              </h3>
+              <p className="text-gray-500 mb-4">
+                Prueba con otras palabras o revisa la ortografía
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchTerm('')
+                  setVisibleProducts(8)
+                }}
+              >
+                Limpiar búsqueda
+              </Button>
+            </div>
+          ) : 
+
+          /* 📁 Estado vacío por CATEGORÍA */
+          displayedProducts.length === 0 && selectedCategory !== 'all' && !searchTerm ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-6xl mb-4">📁</div>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                No hay productos en {categories.find(c => c.id === selectedCategory)?.name}
+              </h3>
+              <p className="text-gray-500 mb-4">
+                Esta categoría está vacía por ahora
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSelectedCategory('all')
+                  setVisibleProducts(8)
+                }}
+              >
+                Ver todas las categorías
+              </Button>
+            </div>
+          ) : 
+
+          /* 🎯 Estado vacío por COMBINACIÓN de filtros */
+          displayedProducts.length === 0 && (searchTerm || selectedCategory !== 'all') ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-6xl mb-4">🎯</div>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                No hay productos que coincidan
+              </h3>
+              <p className="text-gray-500 mb-4">
+                Tu búsqueda y filtros no generaron resultados
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchTerm('')
+                  setSelectedCategory('all')
+                  setSortBy('featured')
+                  setVisibleProducts(8)
+                }}
+              >
+                Ver todos los productos
+              </Button>
+            </div>
+          ) : 
+
+          /* 🛍️ Estado vacío GENERAL (sin productos en absoluto) */
+          displayedProducts.length === 0 && !searchTerm && selectedCategory === 'all' ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-6xl mb-4">🛍️</div>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                No hay productos disponibles
+              </h3>
+              <p className="text-gray-500 mb-4">
+                Pronto agregaremos nuevos productos a la tienda
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => setVisibleProducts(8)}
+              >
+                Recargar productos
+              </Button>
+            </div>
+          ) : null
         )}
         
       {/* MINI CART Sidebar */}

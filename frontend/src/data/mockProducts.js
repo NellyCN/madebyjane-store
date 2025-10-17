@@ -10,7 +10,7 @@ export const mockProducts = [
     category: "crochet",
     image:
       "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg",
-    tags: ["nuevo", "popular"],
+    tags: ["nuevo", "popular"]
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const mockProducts = [
     category: "crochet",
     image:
       "https://i.pinimg.com/1200x/c4/94/62/c49462aeb762b8e47ab71adcd1b40538.jpg",
-    tags: ["popular", "últimas unidades"],
+    tags: ["popular", "últimas unidades"]
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ export const mockProducts = [
     category: "accesorios",
     image:
       "https://i.etsystatic.com/15490967/r/il/85e6ef/3116169667/il_1588xN.3116169667_59y3.jpg",
-    tags: ["nuevo"],
+    tags: ["nuevo"]
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ export const mockProducts = [
     category: "pijamas",
     image:
       "https://i.pinimg.com/1200x/b8/84/dd/b884dd621e06e6328cb7de4c447ef61b.jpg",
-    tags: ["invierno", "acogedor"],
+    tags: ["invierno", "acogedor"]
   },
   {
     id: 5,
@@ -58,7 +58,7 @@ export const mockProducts = [
     category: "crochet",
     image:
       "https://i.pinimg.com/736x/59/1f/9c/591f9c109115083ce3799d2910f2cdd4.jpg",
-    tags: ["bajo stock"],
+    tags: ["bajo stock"]
   },
   {
     id: 6,
@@ -70,7 +70,7 @@ export const mockProducts = [
     category: "crochet",
     image:
       "https://i.pinimg.com/1200x/0e/b2/2d/0eb22df83ba177c4e356a47ffd488abe.jpg",
-    tags: ["verano", "playa"],
+    tags: ["verano", "playa"]
   },
   {
     id: 7,
