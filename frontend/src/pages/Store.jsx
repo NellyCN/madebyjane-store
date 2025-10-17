@@ -3,6 +3,7 @@ import { ProductCard, Badge, Button } from '../components/ui'
 import { useCart } from '../hooks/useCart'
 import { mockProducts, categories } from '../data/mockProducts'
 import { useNavigate } from 'react-router-dom';
+import { useDebounce } from '../hooks/useDebounce'
 
 function Store() {
   const navigate = useNavigate();
@@ -15,6 +16,9 @@ function Store() {
   // 🆕 AGREGAR ESTOS DOS ESTADOS PARA LOAD MORE
   const [visibleProducts, setVisibleProducts] = useState(8); // Mostrar 8 productos inicialmente
   const productsPerLoad = 8; // Cuántos productos cargar cada vez que se hace click
+
+  // 🆕 DEBOUNCING para búsqueda - mejora performance
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const { items, total, removeFromCart, addToCart } = useCart();
 
@@ -48,7 +52,7 @@ function Store() {
     // Filtrar productos por categoría y búsqueda
     const filtered = mockProducts.filter(product => {
       const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesSearch = product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || product.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
       return matchesCategory && matchesSearch
     });    
 
@@ -77,7 +81,7 @@ function Store() {
           }
       }    
     })
-}, [selectedCategory, searchTerm, sortBy])
+}, [selectedCategory, debouncedSearchTerm, sortBy])
 
 // 🆕 Calcula qué productos mostrar
 const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
@@ -108,6 +112,10 @@ const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               />
+              {/* 🆕 INDICADOR DE BÚSQUEDA */}
+              {searchTerm && searchTerm !== debouncedSearchTerm && (
+                <p className="text-xs text-cyan-600 mt-1 animate-pulse">⏳ Buscando...</p>
+              )}
             </div>
 
             {/* Filtros por Categoría */}
@@ -267,7 +275,7 @@ const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
             </div>
           ) : null
         )}
-        
+
       {/* MINI CART Sidebar */}
       {isCartOpen && (
         <div className="fixed right-0 top-20 h-[calc(100vh-5rem)] w-80 bg-white shadow-xl border-l z-50">
