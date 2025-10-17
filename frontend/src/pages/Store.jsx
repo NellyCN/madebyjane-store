@@ -11,7 +11,12 @@ function Store() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('featured')  // 🆕 Estado para ordenamiento
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { items, total, removeFromCart } = useCart();
+  
+  // 🆕 AGREGAR ESTOS DOS ESTADOS PARA LOAD MORE
+  const [visibleProducts, setVisibleProducts] = useState(8); // Mostrar 8 productos inicialmente
+  const productsPerLoad = 8; // Cuántos productos cargar cada vez que se hace click
+
+  const { items, total, removeFromCart, addToCart } = useCart();
 
    // 🆕 CÁLCULOS
    const subtotal = total;
@@ -19,7 +24,7 @@ function Store() {
   const shippingCost = subtotal > 100 ? 0 : 15;
   const finalTotal = subtotal + shippingCost;
   const remainingForFreeShipping = 100 - subtotal;
-  const { addToCart } = useCart()  // 🆕 USAR EL CARRITO
+
   /**
    * Función para manejar agregar al carrito
    */
@@ -45,7 +50,7 @@ function Store() {
       const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase())
       return matchesCategory && matchesSearch
-    })
+    });    
 
     // Luego: Ordenar según el criterio seleccionado
     return filtered.sort((a, b) => {
@@ -73,6 +78,9 @@ function Store() {
       }    
     })
 }, [selectedCategory, searchTerm, sortBy])
+
+// 🆕 Calcula qué productos mostrar
+const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -144,16 +152,30 @@ function Store() {
         </div>
 
         {/* Grid de Productos */}
-        {filteredAndSortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredAndSortedProducts.map(product => (
-              <ProductCard 
-                key={product.id}
-                product={product}
-                onAddToCart={handleAddToCart}
-              />
-            ))}
-          </div>
+        {displayedProducts.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {displayedProducts.map(product => (
+                <ProductCard 
+                  key={product.id}
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                />
+              ))}
+            </div>
+            
+            {/* 🆕 BOTÓN LOAD MORE */}
+            {visibleProducts < filteredAndSortedProducts.length && (
+              <div className="text-center mt-8">
+                <Button variant="outline" 
+                  onClick={() => setVisibleProducts(prev => prev + productsPerLoad)}
+                  className="px-8"
+                >
+                  Cargar más productos ({filteredAndSortedProducts.length - visibleProducts} restantes)
+                </Button>
+              </div>
+            )}
+          </>    
         ) : (
           /* Estado vacío - cuando no hay resultados */
           <div className="text-center py-12">
@@ -170,14 +192,14 @@ function Store() {
                 setSearchTerm('')
                 setSelectedCategory('all')
                 setSortBy('featured')
+                setVisibleProducts(8) // Resetear también la cantidad visible (load more)
               }}
             >
               Mostrar todos los productos
             </Button>
           </div>
         )}
-      </div>
-
+        
       {/* MINI CART Sidebar */}
       {isCartOpen && (
         <div className="fixed right-0 top-20 h-[calc(100vh-5rem)] w-80 bg-white shadow-xl border-l z-50">
@@ -287,6 +309,7 @@ function Store() {
           </span>
         )}
       </button>
+      </div>
     </div>
   )
 }
