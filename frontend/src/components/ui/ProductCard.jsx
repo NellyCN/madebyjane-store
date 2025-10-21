@@ -34,6 +34,7 @@
 import Card from './Card'
 import Button from './Button'
 import Badge from './Badge'
+import { useNavigate } from 'react-router-dom';
 
 export function ProductCard({ product, onAddToCart }) {
   const { 
@@ -48,6 +49,11 @@ export function ProductCard({ product, onAddToCart }) {
 
   const isLowStock = stock < 5
   const isOutOfStock = stock === 0
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/producto/${product.id}`);
+  };
 
   // 🆕 Determinar si es destacado
   // const isFeatured = tags.includes('nuevo') || tags.includes('popular')
@@ -61,9 +67,12 @@ export function ProductCard({ product, onAddToCart }) {
   }
 
   return (
-    <Card className="overflow-hidden">
-      {/* Product Image */}
-      <div className="aspect-square bg-gray-200 flex items-center justify-center relative">
+    <Card className="overflow-hidden cursor-pointer"> {/* 🆕 AGREGANDO cursor-pointer */}
+
+      {/* Product Image - CLICKABLE */}
+      <div className="aspect-square bg-gray-200 flex items-center justify-center relative cursor-pointer"
+        onClick={handleCardClick}  // 🆕 Navegar al detalle al hacer click en la imagen
+      > 
         {image ? (
           <img 
             src={image} 
@@ -84,8 +93,9 @@ export function ProductCard({ product, onAddToCart }) {
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="p-4">
+      {/* Product Info - CLICKABLE */}
+      <div className="p-4 cursor-pointer" onClick={handleCardClick}>
+        
         {/* Category Badge */}
         <div className="mb-2">
           <Badge variant="default">
@@ -119,13 +129,20 @@ export function ProductCard({ product, onAddToCart }) {
             )}
           </div>
         </div>
+      </div>
 
-        {/* Add to Cart Button */}
+      {/* 🆕 Botón con stopPropagation */}
+      <div className="px-4 pb-4"> {/* 🆕 Se agrega Contenedor para separar */}
+
+        {/* Add to Cart Button - EVITAR que el click navegue */}
         <Button
           variant={isOutOfStock ? "secondary" : "primary"}
           size="md"
           disabled={isOutOfStock}
-          onClick={() => onAddToCart && onAddToCart(product)}
+          onClick={(e) => {
+            e.stopPropagation(); // 🆕 IMPORTANTE: Evitar que el click navegue a la página de detalle
+            onAddToCart && onAddToCart(product);
+          }}
           className="w-full"
         >
           {isOutOfStock ? 'Agotado' : 'Agregar al Carrito'}

@@ -8,7 +8,7 @@ import Blog from './pages/Blog'
 import Cart from './pages/Cart' 
 import ComponentDemo from './pages/ComponentDemo'
 import NotFound from './pages/NotFound'
-
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <div className="App">
         <WaveHeader />
         
-        {/* 🆕 CONFIGURAR RUTAS */}
+        {/* 🆕 CONFIGURANDO RUTAS */}
         <main className="p-4">
           <Routes>
             <Route path="/" element={<Store />} />
@@ -27,8 +27,10 @@ function App() {
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/demo" element={<ComponentDemo />} />
+            <Route path="/producto/:id" element={<ProductDetail />} />
             {/* Ruta 404 - debe ir al final */}
             <Route path="*" element={<NotFound />} />
+            
           </Routes>
         </main>
       </div>

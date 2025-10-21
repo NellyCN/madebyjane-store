@@ -4,8 +4,17 @@ export const mockProducts = [
     id: 1,
     name: "Top Crochet Conchas Marinas",
     price: 145.00,
-    description:
-      "Top tejido a crochet en hilo de algodón pima peruano, suave y respirable. Inspirado en las conchas marinas.",
+    description: "Top tejido a crochet en hilo de algodón pima peruano, suave y respirable. Inspirado en las conchas marinas.",
+    fullDescription: "Este top tejido a crochet está elaborado en hilo de algodón pima peruano de la más alta calidad. Es suave al tacto, respirable y perfecto para climas cálidos. El diseño único de conchas marinas lo hace ideal para looks playeros o urbanos. Cada pieza es tejida a mano con atención al detalle, asegurando un producto único y duradero.",
+    features: [
+      "Material: 100% algodón pima peruano",
+      "Tejido a mano artesanalmente", 
+      "Lavable a mano con agua fría",
+      "Secado plano para mantener la forma",
+      "Ideal para verano y climas cálidos"
+    ],
+    careInstructions: "Lavar a mano con agua fría. No usar blanqueador. Secar plano. No meter a la lavadora o secadora.",
+    measurements: "Talla única - Elástico para mejor ajuste",
     stock: 7,
     category: "crochet",
     image:
