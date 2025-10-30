@@ -4,6 +4,8 @@ import { useCart } from '../hooks/useCart'
 import { mockProducts, categories } from '../data/mockProducts'
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce'
+import { useLocation } from "react-router-dom";
+import { useEffect } from 'react';
 
 function Store() {
   const navigate = useNavigate();
@@ -13,6 +15,18 @@ function Store() {
   const [sortBy, setSortBy] = useState('featured')  // 🆕 Estado para ordenamiento
   const [isCartOpen, setIsCartOpen] = useState(false);
   
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryFilter = queryParams.get("category"); // 👈 Captura la categoría
+  
+  // Aplicar el filtro de categoría, al llegar desde un enlace 
+  // con ?category=accesorios y se muestran en Store.jsx
+  useEffect(() => {
+      if (categoryFilter) {
+          setSelectedCategory(categoryFilter);
+      }
+  }, [categoryFilter]);
+
   // 🆕 AGREGAR ESTOS DOS ESTADOS PARA LOAD MORE
   const [visibleProducts, setVisibleProducts] = useState(8); // Mostrar 8 productos inicialmente
   const productsPerLoad = 8; // Cuántos productos cargar cada vez que se hace click
@@ -47,16 +61,27 @@ function Store() {
   }
 
   // 🆕 FUNCIÓN DE ORDENAMIENTO
-  // useMemo para optimizar - solo recalcula cuando cambian los datos o el orden
+  // 🧠 MEMOIZACIÓN para evitar cálculos innecesarios
   const filteredAndSortedProducts = useMemo(() => {
-    // Filtrar productos por categoría y búsqueda
+    // 🔍 Determinar categoría activa:
+    // Si llegamos desde un enlace con ?category= en la URL,
+    // usamos ese valor, de lo contrario, el estado seleccionado por botones.
+    const activeCategory = categoryFilter || selectedCategory;
+
+    // 🧹 Filtrar productos según categoría y búsqueda
     const filtered = mockProducts.filter(product => {
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
-      const matchesSearch = product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || product.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      return matchesCategory && matchesSearch
+      // Coincide si la categoría activa es "all" o coincide exactamente con la del producto
+      const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+
+      // Coincide si el nombre o descripción contiene el término de búsqueda
+      const matchesSearch =
+        product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+
+      return matchesCategory && matchesSearch;
     });    
 
-    // Luego: Ordenar según el criterio seleccionado
+    // 🔄 Ordenamiento según el criterio seleccionado
     return filtered.sort((a, b) => {
       switch (sortBy) {
         case 'price-low-high': return a.price - b.price // Menor precio primero
@@ -67,23 +92,26 @@ function Store() {
         case 'featured':
         default:
           {
-            // Orden por destacados: primero los que tienen stock, luego por tags especiales
+            // Productos destacados primero: los que tienen stock y tags relevantes
             const aHasStock = a.stock > 0
             const bHasStock = b.stock > 0
             if (aHasStock && !bHasStock) return -1
             if (!aHasStock && bHasStock) return 1
+
             // Si ambos tienen stock, los "nuevos" y "populares" primero
             const aIsFeatured = a.tags?.includes('nuevo') || a.tags?.includes('popular')
             const bIsFeatured = b.tags?.includes('nuevo') || b.tags?.includes('popular')
             if (aIsFeatured && !bIsFeatured) return -1
             if (!aIsFeatured && bIsFeatured) return 1
+
             return 0 // Mantener orden original
           }
       }    
     })
-}, [selectedCategory, debouncedSearchTerm, sortBy])
+// 🔄 Dependencias: recalcula solo cuando cambian estas variables
+}, [selectedCategory, debouncedSearchTerm, sortBy, categoryFilter]);
 
-// 🆕 Calcula qué productos mostrar
+// 🎯 Determinar los productos visibles (paginación o "load more")
 const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
 
   return (
@@ -93,10 +121,10 @@ const displayedProducts = filteredAndSortedProducts.slice(0, visibleProducts);
         {/* Header de la Tienda */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Mar & Naturaleza</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Tejidos a crochet inspirados en el océano, accesorios con vibra natural 
-            y pijamas de peluche para inviernos acogedores.
-          </p>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Tejidos a crochet inspirados en el océano, accesorios con vibra natural 
+              y pijamas de peluche para inviernos acogedores.
+            </p>
         </div>
 
         {/* Filtros y Búsqueda */}

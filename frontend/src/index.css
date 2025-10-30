@@ -6,4 +6,10 @@
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
