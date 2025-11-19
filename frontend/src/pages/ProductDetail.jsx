@@ -5,46 +5,64 @@ import { useCart } from "../hooks/useCart";
 import { mockProducts } from "../data/mockProducts";
 
 function ProductDetail() {
+    // ======================================================
+    // 1. ROUTER & BASIC DATA
+    // ======================================================
+
     const { id } = useParams(); // 🆕 Obtiene el ID de la URL
     const navigate = useNavigate();
     const { addToCart } = useCart();
-
+    
     // 🆕 Buscar el PRODUCTO por ID
     const product = mockProducts.find((p) => p.id === parseInt(id));
+    
+    // ======================================================
+    // 2. STATES
+    // ======================================================
 
+    /* -----------------------------------
+        🟦 ESTADOS BASE DEL PRODUCTO
+    ----------------------------------- */
+
+    // Cantidad seleccionada
     const [quantity, setQuantity] = useState(1);
 
-    // 🆕 Agregar estado para el toast
-    const [showToast, setShowToast] = useState(false);
-    const [buttonText, setButtonText] = useState(""); // 🆕 Estado para el texto del botón
-
-    const [activeTab, setActiveTab] = useState("description"); // 🆕 Estado para pestaña
-
-    // 🆕 Estados nuevos para variantes
+    // 🆕 Estados nuevos para variantes seleccionadas
     const [selectedSize, setSelectedSize] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
 
-    // 🆕 Estado para errores de selección
+    // 🆕 Estado para Errores de selección (tallas/colores)
     const [variantError, setVariantError] = useState("");
 
+    // Imagen activa del slider
     const [activeImage, setActiveImage] = useState(product?.image || "");
 
-
-   // 🧩 Control de productos relacionados visibles
-    // const relatedProducts = mockProducts.filter(
-    //     (p) => p.category === product.category && p.id !== product.id
-    // );
-    const relatedProducts = product
-    ? mockProducts.filter(
-        (p) => p.category === product.category && p.id !== product.id
-    )
-    : [];
-
-    // Estado inicial para el índice de inicio de productos relacionados
-    const [startIndex, setStartIndex] = useState(0);
-    
+    // Índice actual de la imagen en la galería
     const [imageIndex, setImageIndex] = useState(0);
 
+    /* -----------------------------------
+        🟩 ESTADOS DE INTERFAZ (UI)
+    ----------------------------------- */
+
+    // Estado Pestaña activa (Descripción / Especificaciones / Cuidados)
+    const [activeTab, setActiveTab] = useState("description");
+
+    // Control del toast que aparece al agregar al carrito
+    const [showToast, setShowToast] = useState(false);
+
+    // Texto dinámico del botón "Agregar al carrito"
+    const [buttonText, setButtonText] = useState("");
+
+    /* -----------------------------------------
+        🟪 ESTADO DE PRODUCTOS RELACIONADOS
+    ----------------------------------------- */
+    
+    // Estado inicial para el carrusel de productos relacionados
+    const [startIndex, setStartIndex] = useState(0);
+
+    // ======================================================
+    // 3. DERIVED DATA
+    // ======================================================
 
     // 🔁 Función para definir cuántos productos se muestran según el tamaño
     const getVisibleCount = () => {
@@ -53,21 +71,22 @@ function ProductDetail() {
         return 4; // desktop
     };
 
+    // 🧩 Control de productos relacionados visibles
+    const relatedProducts = product
+        ? mockProducts.filter(
+            (p) => p.category === product.category && p.id !== product.id
+        )
+        : [];
+
     const visibleCount = getVisibleCount();
 
     // 🔁 Productos visibles dinámicos
     const visibleProducts = relatedProducts.slice(startIndex, startIndex + visibleCount);
 
-    // 🔁 Función para mover de a 1 producto
-    const scrollRelated = (direction) => {
-        const newIndex = startIndex + direction * 1; // 👈 avanzar o retroceder 1 producto
-        const maxIndex = relatedProducts.length - visibleCount;
+    // ======================================================
+    // 4. EFFECTS
+    // ======================================================
 
-        if (newIndex >= 0 && newIndex <= maxIndex) {
-            setStartIndex(newIndex);
-        }
-    };
-    
     // 🔁 Actualiza texto del botón cuando cambia cantidad o producto
     useEffect(() => {
         if (product) {
@@ -102,6 +121,10 @@ function ProductDetail() {
             </div>
         );
     }
+
+    // ======================================================
+    // 5. HANDLERS & FUNCTIONS
+    // ======================================================
 
     // 🛒 Agregar producto al carrito
     const handleAddToCart = () => {
@@ -155,6 +178,19 @@ function ProductDetail() {
         setActiveImage(product.gallery[newIndex]);
     };
 
+    // 🔁 Función para mover de a 1 producto
+    const scrollRelated = (direction) => {
+        const newIndex = startIndex + direction * 1; // 👈 avanzar o retroceder 1 producto
+        const maxIndex = relatedProducts.length - visibleCount;
+
+        if (newIndex >= 0 && newIndex <= maxIndex) {
+            setStartIndex(newIndex);
+        }
+    };
+    
+    // ======================================================
+    // 6. RENDER HELPERS
+    // ======================================================
 
     // 📑 Función para renderizar el Contenido de pestañas dinámico
     const renderTabContent = () => {
@@ -284,7 +320,9 @@ function ProductDetail() {
         }
     };
 
-
+    // ======================================================
+    // 7. RETURN
+    // ======================================================
 
     return (
         <div className="min-h-screen bg-gray-50 pt-20">
