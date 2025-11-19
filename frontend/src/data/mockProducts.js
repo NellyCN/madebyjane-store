@@ -19,7 +19,26 @@ export const mockProducts = [
     category: "crochet",
     image:
       "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg",
-    tags: ["nuevo", "popular"]
+    tags: ["nuevo", "popular"],
+    // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "Blanco", hex: "#FFFFFF", image: "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg" },
+        { name: "Arena", hex: "#D2B48C", image: "https://i.pinimg.com/1200x/12/34/56/imagen_arena.jpg" },
+        { name: "Coral", hex: "#FF7F50", image: "https://i.pinimg.com/1200x/98/76/54/imagen_coral.jpg" }
+      ],
+      sizes: [
+        { name: "S", measurements: "Busto 84-88cm / Cintura 66-70cm" },
+        { name: "M", measurements: "Busto 88-92cm / Cintura 70-74cm" },
+        { name: "L", measurements: "Busto 92-96cm / Cintura 74-78cm" },
+        { name: "XL", measurements: "Busto 96-100cm / Cintura 78-82cm" }
+      ],
+    },
+    gallery: [
+      "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg",
+      "https://i.pinimg.com/1200x/12/34/56/imagen_espalda.jpg",
+      "https://i.pinimg.com/1200x/98/76/54/imagen_detalle.jpg"
+    ]
   },
   {
     id: 2,
@@ -40,7 +59,23 @@ export const mockProducts = [
     stock: 1,
     category: "crochet",
     image: "https://i.pinimg.com/1200x/c4/94/62/c49462aeb762b8e47ab71adcd1b40538.jpg",
-    tags: ["popular", "últimas unidades"]
+    tags: ["popular", "últimas unidades"],
+        // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "Blanco", hex: "#FFFFFF", image: "https://i.pinimg.com/1200x/c4/94/62/c49462aeb762b8e47ab71adcd1b40538.jpg" },
+        { name: "Arena", hex: "#c00303ff", image: "https://i.pinimg.com/1200x/9b/57/8d/9b578d5df8200b86757a4d9ed00630e6.jpg" },
+        { name: "Celeste", hex: "#18acfbff", image: "https://i.pinimg.com/1200x/21/da/a9/21daa9b769d464123fc795f8fdaefad1.jpg" }
+      ],
+      sizes: [
+        { name: "Unica", measurements: "Ancho 40cm / Alto 30cm / Profundidad 8cm / Asa 45cm" }
+      ],
+    },
+    gallery: [
+      "https://i.pinimg.com/1200x/c4/94/62/c49462aeb762b8e47ab71adcd1b40538.jpg",
+      "https://i.pinimg.com/1200x/9b/57/8d/9b578d5df8200b86757a4d9ed00630e6.jpg",
+      "https://i.pinimg.com/1200x/21/da/a9/21daa9b769d464123fc795f8fdaefad1.jpg"
+    ]
   },
   {
     id: 3,
@@ -61,7 +96,19 @@ export const mockProducts = [
     stock: 9,
     category: "accesorios",
     image: "https://i.etsystatic.com/15490967/r/il/85e6ef/3116169667/il_1588xN.3116169667_59y3.jpg",
-    tags: ["nuevo"]
+    tags: ["nuevo"],
+        // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "Dorado", hex: "#d2a204ff", image: "https://i.etsystatic.com/15490967/r/il/85e6ef/3116169667/il_1588xN.3116169667_59y3.jpg" }        
+      ],
+      sizes: [
+        { name: "Unica", measurements: "4cm" }
+      ],
+    },
+    gallery: [
+      "https://i.etsystatic.com/15490967/r/il/85e6ef/3116169667/il_1588xN.3116169667_59y3.jpg"
+    ]
   },
   {
     id: 4,
@@ -79,10 +126,66 @@ export const mockProducts = [
     ],
     careInstructions: "Lavable en lavadora a 30°C. No usar blanqueador. Secar en secadora a baja temperatura.",
     measurements: "Tallas disponibles: S (1.50-1.60m), M (1.60-1.70m)",
-    stock: 9,
+    stock: 5,
     category: "pijamas",
     image: "https://i.pinimg.com/1200x/b8/84/dd/b884dd621e06e6328cb7de4c447ef61b.jpg",
-    tags: ["invierno", "acogedor"]
+    tags: ["invierno", "acogedor"],
+    
+    variants: {
+      colors: [
+        { name: "Celeste", hex: "#ADD8E6", image: "https://i.pinimg.com/1200x/b8/84/dd/b884dd621e06e6328cb7de4c447ef61b.jpg" },
+        { name: "Rosa", hex: "#FFC0CB", image: "https://i.pinimg.com/1200x/12/34/aa/imagen_pijama_rosa.jpg" }
+      ],
+      sizes: [
+        { name: "S", measurements: "Altura 1.50-1.60m / Cintura 60-70cm" },
+        { name: "M", measurements: "Altura 1.60-1.70m / Cintura 70-80cm" },
+        { name: "L", measurements: "Altura 1.70-1.80m / Cintura 80-90cm" }
+      ]
+    },
+    gallery: [
+      "https://i.pinimg.com/1200x/b8/84/dd/b884dd621e06e6328cb7de4c447ef61b.jpg",
+      "https://i.pinimg.com/1200x/98/54/23/imagen_pijama_detalle.jpg",
+      "https://i.pinimg.com/1200x/43/12/76/imagen_pijama_modelo.jpg"
+    ]
+  },
+  {
+    id: 5,
+    name: "Pijama Peluche - Panda",
+    price: 120.00,
+    description: "Pijama de peluche ultra suave para noches frías. Incluye abrigo con capucha y pantalón. Tallas S-M y M-L disponibles.",
+    // 🆕 CAMPOS NUEVOS:
+    fullDescription: "Dulce pijama de peluche con diseño de adorable pandita. Confeccionado en tejido peluche ultra suave que te mantendrá abrigado y cómodo durante las noches más frías. Incluye capucha con detalles del personaje, bolsillos laterales, cierre en el pecho, pretina en puños y basta, corte amplio oversize. Perfecto para regalar o consentirte en invierno.",
+    features: [
+      "Material: Peluche ultra suave de alta calidad",
+      "Conjunto enterizo con capucha",
+      "Capucha con detalles del personaje",
+      "Bolsillos laterales",
+      "Pretina en puños y tobillos para mejor abrigo",
+      "Adorable colita en el trasero - Opcional (puedes solicitar sin colita al hacer tu pedido)"
+    ],
+    careInstructions: "Lavable en lavadora a 30°C. No usar blanqueador. Secar en secadora a baja temperatura.",
+    measurements: "Tallas disponibles: S-M (1.50-1.60m), L-XL (1.60-1.70m)",
+    stock: 4,
+    category: "pijamas",
+    image: "https://i.pinimg.com/736x/b3/fc/65/b3fc65e5798d1ccb2e0a60f102a3678b.jpg",
+    tags: ["invierno", "acogedor"],
+    // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "negro/blanco", hex1: "#00000000", hex2: "#ffffffff", image: "https://i.pinimg.com/736x/b3/fc/65/b3fc65e5798d1ccb2e0a60f102a3678b.jpg" },
+        { name: "marron/crema", hex1: "#402f10ff", hex2: "#f4dfb8ff", image: "https://i.pinimg.com/736x/10/bc/79/10bc7991140da42b6ed2d6f54187214c.jpg" }
+      ],
+      sizes: [
+        { name: "S-M", measurements: "Altura 2.50-1.60m / Cintura 70-80cm" },
+        { name: "L-XL", measurements: "Altura 1.60-1.70m / Cintura 80-100cm" },
+      ]
+    },
+    gallery: [
+      "https://i.pinimg.com/736x/b3/fc/65/b3fc65e5798d1ccb2e0a60f102a3678b.jpg",
+      "https://i.pinimg.com/736x/8a/1a/3d/8a1a3d1eece848979333a276359b21b8.jpg",
+      "https://i.pinimg.com/1200x/2c/93/9a/2c939a1a43f9e8d21bc867cd98e00ef3.jpg",
+      "https://i.pinimg.com/736x/10/bc/79/10bc7991140da42b6ed2d6f54187214c.jpg"
+    ]
   },
   {
     id: 6,
@@ -123,27 +226,57 @@ export const mockProducts = [
     stock: 0,
     category: "pijamas",
     image: "https://i.pinimg.com/736x/98/70/76/98707651f390ca3681a92f848ca698c0.jpg",
-    tags: ["agotado"]
+    tags: ["agotado"],
+    // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "melon", hex: "#edb39aff", image: "https://i.pinimg.com/736x/98/70/76/98707651f390ca3681a92f848ca698c0.jpg" },
+        { name: "gris", hex: "#6c6c6bff", image: "https://i.pinimg.com/736x/98/70/76/98707651f390ca3681a92f848ca698c0.jpg" }
+      ],
+      sizes: [
+        { name: "35-36", measurements: "Ancho 8.00-9.00cm / Largo 23-24cm" },
+        { name: "37-38", measurements: "Ancho 10.00-11.00cm / Largo 25-27cm" },
+      ]
+    },
+    gallery: [
+      "https://i.pinimg.com/736x/b3/fc/65/b3fc65e5798d1ccb2e0a60f102a3678b.jpg",
+      "https://i.pinimg.com/1200x/23/8b/3a/238b3a0a74e2586dbd8a032914ef6161.jpg",
+      "https://i.pinimg.com/736x/92/df/1f/92df1fe907e09c929b59f42ae3cddca5.jpg"
+    ]    
+
   },
   {
     id: 8,
     name: "Collar Artesanal Conchas",
     price: 37.00,
     description: "Collar artesanal con conchas naturales y detalles en plata. Largo ajustable.",
-    fullDescription: "Hermoso collar artesanal que combina conchas naturales recolectadas responsablemente con delicados detalles en plata. Cada concha es única, mostrando los patrones y colores que la naturaleza creó. El largo ajustable permite usarlo como collar corto o largo, adaptándose a diferentes estilos y ocasiones.",
+    fullDescription: "Hermoso collar artesanal que combina conchas naturales recolectadas responsablemente con delicados detalles en hilo tejido. Cada concha es única, mostrando los patrones y colores que la naturaleza creó. El largo ajustable permite usarlo como collar corto o largo, adaptándose a diferentes estilos y ocasiones.",
     features: [
-      "Material: Conchas naturales y plata 925",
+      "Material: Conchas naturales y hilo resistente",
       "Largo ajustable de 40-50cm",
-      "Cierre de seguridad de resorte",
+      "Cierre con nudo deslizante",
       "Cada pieza es única y natural",
       "Ideal para looks boho y playeros"
     ],
-    careInstructions: "Evitar contacto con agua, perfumes y cremas. Guardar en bolsa de tela.",
+    careInstructions: "Limpiar con paño húmedo. Evitar contacto con productos químicos.",
     measurements: "Largo ajustable: 40cm - 50cm",
     stock: 6,
     category: "accesorios",
     image: "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg",
-    tags: ["artesanal"]
+    tags: ["artesanal"],
+    // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "Dorado", hex: "#FFD700", image: "https://i.etsystatic.com/15490967/r/il/85e6ef/3116169667/il_1588xN.3116169667_59y3.jpg" },
+        { name: "Nácar Blanco", hex: "#F8F8FF", image: "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg" }
+      ]
+    },
+
+    gallery: [
+      "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg",
+      "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg",
+      "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg"
+    ]  
   },
   {
     id: 9,
@@ -163,7 +296,19 @@ export const mockProducts = [
     stock: 6,
     category: "crochet",
     image: "https://i.pinimg.com/1200x/89/78/f0/8978f006b43b2ea385b5b8f338599a48.jpg",
-    tags: ["nuevo", "artesanal"]
+    tags: ["nuevo", "artesanal"],
+    // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "Multicolor", hex: "#5b3df3ff", image: "https://i.pinimg.com/1200x/89/78/f0/8978f006b43b2ea385b5b8f338599a48.jpg" },
+        { name: "Blanco", hex: "#F8F8FF", image: "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg" }
+      ]
+    },
+
+    gallery: [
+      "https://i.pinimg.com/1200x/89/78/f0/8978f006b43b2ea385b5b8f338599a48.jpg",
+      "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg"
+    ]  
   },
   {
     id: 10,
