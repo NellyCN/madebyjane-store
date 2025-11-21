@@ -15,7 +15,7 @@ function ProductDetail() {
     const { addToCart } = useCart();
     
     // 🆕 Buscar el PRODUCTO por ID
-    const product = mockProducts.find((p) => p.id === parseInt(id));
+    const product = mockProducts.find((p) => p.id === parseInt(id,10));
     
     // ======================================================
     // 2. STATES
@@ -36,7 +36,7 @@ function ProductDetail() {
     const [variantError, setVariantError] = useState("");
 
     // Imagen activa del slider
-    const [activeImage, setActiveImage] = useState(product?.image || "");
+    const [activeImage, setActiveImage] = useState("");
 
     // Índice actual de la imagen en la galería
     const [imageIndex, setImageIndex] = useState(0);
@@ -54,16 +54,26 @@ function ProductDetail() {
     // Texto dinámico del botón "Agregar al carrito"
     const [buttonText, setButtonText] = useState("");
 
-
-    
-
     // ======================================================
     // 3. EFFECTS
     // ======================================================
 
+    // Sync activeImage when product changes
+    useEffect(() => {
+        if (!product) return;
+        // usa la primera imagen de gallery si existe, si no fallback a product.image
+        const first = (product.gallery && product.gallery.length > 0) ? product.gallery[0] : product.image || "";
+        setActiveImage(first);
+        setImageIndex(0);
+        setSelectedColor(null);
+        setSelectedSize(null);
+        setVariantError("");
+    }, [product]);
+
+
     // 🔁 Actualiza texto del botón cuando cambia cantidad o producto
     useEffect(() => {
-        if (product) {
+        if (!product) return;
             setButtonText(
                 product.stock === 0
                     ? "Producto Agotado"
@@ -71,8 +81,7 @@ function ProductDetail() {
                         product.price * quantity
                     ).toFixed(2)}`
             );
-        }
-    }, [id, product, quantity]);
+    }, [product, quantity]);
 
     // Forzar scroll al inicio cada vez que cambia el producto o pestaña activa.
     useEffect(() => {
@@ -83,7 +92,7 @@ function ProductDetail() {
     if (!product) {
         return (
             <div className="min-h-screen bg-gray-50 pt-20">
-                <div className="container mx-auto px-4 py-8 text-center">
+                <div className="container mx-auto px-3 sm:px-4 py-8 text-center">
                     <div className="text-gray-400 text-6xl mb-4">❌</div>
                     <h1 className="text-2xl font-bold text-gray-800 mb-4">
                         Producto no encontrado
@@ -122,37 +131,33 @@ function ProductDetail() {
         };
 
         // Agregar varias unidades
-        for (let i = 0; i < quantity; i++) {
-            addToCart(productWithVariants);
-        }
-
+        for (let i = 0; i < quantity; i++) addToCart(productWithVariants);
+        
         setButtonText("¡Agregado! 🎉");
         setShowToast(true);
-
         setTimeout(() => {
             setButtonText(
                 `Agregar ${quantity} al Carrito - $${(product.price * quantity).toFixed(2)}`
             );
             setShowToast(false);
-        }, 2000);
+        }, 1400);
     };
 
     // 🆕 Funciones del SLIDER (para cambiar imagen en galería)
     const prevImage = () => {
-        if (!product.gallery) return;
+        if (!product.gallery || product.gallery.length === 0) return;
         const newIndex = (imageIndex - 1 + product.gallery.length) % product.gallery.length;
         setImageIndex(newIndex);
         setActiveImage(product.gallery[newIndex]);
     };
 
     const nextImage = () => {
-        if (!product.gallery) return;
+        if (!product.gallery || product.gallery.length === 0) return;
         const newIndex = (imageIndex + 1) % product.gallery.length;
         setImageIndex(newIndex);
         setActiveImage(product.gallery[newIndex]);
     };
 
-    
     // ======================================================
     // 5. RENDER HELPERS
     // ======================================================
@@ -289,9 +294,10 @@ function ProductDetail() {
     // 6. RETURN
     // ======================================================
 
+    // Responsive paddings and sizes
     return (
         <div className="min-h-screen bg-gray-50 pt-20">
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
                 {/* 🆕 Botón volver */}
                 <Button
                     variant="outline"
@@ -306,88 +312,72 @@ function ProductDetail() {
 
                 {/* 🆕 CONTENIDO DEL PRODUCTO*/}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
-                        {/* 🆕 Miniaturas de galería */}
-                        {product.gallery?.length > 0 && (
-                            // 🖼️ Columna 1: Galería de imágenes
-                            <div className="flex flex-col items-center">
-                                {/* IMAGEN PRINCIPAL */}
-                                <div className="relative bg-gray-100 rounded-lg p-6 flex items-center justify-center min-h-[450px]">
-                                    <img
-                                        src={activeImage}
-                                        alt={product.name}
-                                        className="max-w-full max-h-[450px] object-contain rounded-lg"
-                                    />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 p-3 sm:p-6">
 
-                                    {/* 🆕 FLECHAS */}
-                                    <button
-                                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2 shadow hover:bg-opacity-100"
-                                        onClick={prevImage}
-                                    >
-                                        ←
-                                    </button>
-                                    <button
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2 shadow hover:bg-opacity-100"
-                                        onClick={nextImage}
-                                    >
-                                        →
-                                    </button>
-                                </div>
+                        {/* 🖼️ Columna 1: Galería de imágenes */}
+                        <div className="flex flex-col items-center">
+                            {/* IMAGEN PRINCIPAL */}
+                            <div className="relative bg-gray-100 rounded-lg p-4 sm:p-6 flex items-center justify-center w-full min-h-[320px] sm:min-h-[450px]">
+                                {/* 🆕 Miniaturas de galería */}
+                                {activeImage ? (
+                                    <img src={activeImage} alt={product.name} className="max-w-full max-h-[350px] sm:max-h-[450px] object-contain rounded-lg" />
+                                ) : (
+                                    <div className="text-gray-400 text-6xl">🖼️</div>
+                                )}
 
-                                {/* MINIATURAS DEBAJO */}
-                                {product.gallery?.length > 0 && (
-                                    <div className="flex gap-3 mt-4 justify-center">
-                                        {product.gallery.map((img, index) => (
-                                            <img
-                                                key={index}
-                                                src={img}
-                                                onClick={() => {
-                                                    setActiveImage(img)
-                                                    setImageIndex(index);
-                                                }}
-                                                // alt={`Miniatura ${index + 1}`}
-                                                className={`w-20 h-20 object-cover rounded-lg border cursor-pointer transition ${
-                                                    activeImage === img
-                                                        ? "border-cyan-600 shadow-md"
-                                                        : "border-gray-300 hover:border-cyan-400"
-                                                }`}
-                                            />
-                                        ))}
-                                    </div>
+                                {/* 🆕 Flechas flotantes */}
+                                {product.gallery?.length > 1 && (
+                                    <>
+                                        <button onClick={prevImage} aria-label="Imagen anterior"
+                                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-90 rounded-full p-2 shadow hover:bg-opacity-100">
+                                            ←
+                                        </button>
+                                        <button onClick={nextImage} aria-label="Imagen siguiente"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-90 rounded-full p-2 shadow hover:bg-opacity-100">
+                                            →
+                                        </button>
+                                    </>
                                 )}
                             </div>
 
-                        )}
+                            {/* MINIATURAS DEBAJO */}
+                            {product.gallery?.length > 0 && (
+                                <div className="flex gap-3 mt-4 justify-center">
+                                    {product.gallery.map((img, index) => (
+                                        <img
+                                            key={index}
+                                            src={img}
+                                            onClick={() => {
+                                                setActiveImage(img)
+                                                setImageIndex(index);
+                                            }}
+                                            // alt={`Miniatura ${index + 1}`}
+                                            className={`w-20 h-20 object-cover rounded-lg border cursor-pointer transition ${
+                                                activeImage === img
+                                                    ? "border-cyan-600 shadow-md"
+                                                    : "border-gray-300 hover:border-cyan-400"
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
                         {/* 📋 Columna 2: Información del producto */}
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800 mb-4">
-                                {product.name}
-                            </h1>
-                            <p className="text-2xl font-bold text-cyan-600 mb-4">
-                                ${product.price}
-                            </p>
-
+                            <h1 className="text-3xl font-bold text-gray-800 mb-3">{product.name}</h1>
+                            <p className="text-2xl font-bold text-cyan-600 mb-4">${product.price}</p>
                             {/* Descripción corta */}
-                            <p className="text-gray-600 mb-6 text-lg leading-relaxed">
-                                {product.description}
-                            </p>
-                            
+                            <p className="text-gray-600 mb-4 text-lg leading-relaxed">{product.description}</p>
+    
                             {/* 🆕 Variantes de tallas */}
                             {product.variants?.sizes?.length > 0 && (
-                                <div className="mb-6">
-                                    <span className="text-gray-700 font-medium block mb-2">Talla:</span>
-                                    <div className="flex gap-3">
+                                <div className="mb-4">
+                                    <span className="block text-gray-700 font-medium mb-2">Talla:</span>
+                                    <div className="flex flex-wrap gap-2">
                                         {product.variants.sizes.map((size) => (
-                                            <button
-                                                key={size.name}
-                                                onClick={() => setSelectedSize(size.name)}
-                                                className={`px-4 py-2 rounded-lg border text-sm transition ${
-                                                    selectedSize === size.name
-                                                        ? "bg-cyan-600 text-white border-cyan-600"
-                                                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                                                }`}
-                                            >
+                                            <button key={size.name} onClick={() => setSelectedSize(size.name)}
+                                                className={`px-3 py-2 rounded-lg border text-sm ${selectedSize === size.name ? "bg-cyan-600 text-white border-cyan-600" : "bg-white border-gray-300"}`}>
                                                 {size.name}
                                             </button>
                                         ))}
@@ -397,20 +387,19 @@ function ProductDetail() {
 
                             {/* 🆕 Variantes de colores */}
                             {product.variants?.colors?.length > 0 && (
-                                <div className="mb-6">
-                                    <span className="text-gray-700 font-medium block mb-2">Color:</span>
-                                    <div className="flex gap-3">
+                                <div className="mb-4">
+                                    <span className="block text-gray-700 font-medium mb-2">Color:</span>
+                                    <div className="flex flex-wrap gap-2 items-center">
                                         {product.variants.colors.map((color) => (
                                             <button
                                                 key={color.name}
                                                 onClick={() => {
                                                     setSelectedColor(color.name);
-                                                    setActiveImage(color.image);  // 🆕 Cambiar imagen del producto
+                                                    setActiveImage(color.image || activeImage);  // 🆕 Cambiar imagen del producto
                                                 }}
-                                                className={`px-4 py-2 rounded-lg border text-sm transition ${
+                                                className={`px-3 py-2 rounded-lg border text-sm ${
                                                     selectedColor === color.name
-                                                        ? "bg-cyan-600 text-white border-cyan-600"
-                                                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                                                        ? "bg-cyan-600 text-white border-cyan-600" : "bg-white border-gray-300"
                                                 }`}
                                             >
                                                 {color.name}
@@ -420,14 +409,13 @@ function ProductDetail() {
                                 </div>
                             )}
 
-
                             {/* 🔢 Selector de cantidad */}
                             <div className="flex items-center gap-4 mb-6">
                                 <span className="text-gray-700 font-medium">Cantidad:</span>
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                                        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition disabled:opacity-50"
+                                        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300"
                                         disabled={quantity <= 1}
                                     >
                                         -
@@ -437,9 +425,8 @@ function ProductDetail() {
                                         onClick={() =>
                                             setQuantity((prev) => Math.min(product.stock, prev + 1))
                                             }
-                                        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition disabled:opacity-50"
-                                        disabled={quantity >= product.stock}
-                                    >
+                                        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300" disabled={quantity >= product.stock}
+                                    > 
                                         +
                                     </button>
                                 </div>
@@ -452,67 +439,55 @@ function ProductDetail() {
                                 }
                                 onClick={handleAddToCart}
                                 disabled={product.stock === 0}
-                                className={`w-full py-3 text-lg ${
-                                    buttonText.includes("¡Agregado!")
-                                        ? "bg-green-500 hover:bg-green-600"
-                                        : ""
-                                }`}
-                            >
-                                {buttonText}
+                                className="w-full py-3 text-lg">
+                                    {buttonText}
                             </Button>
+
                             {/* 🚫 Mensaje de error de variantes */}
                             {variantError && (
                                 <p className="text-red-600 font-medium mt-2">{variantError}</p>
                             )}
-
                         </div>
                     </div>
 
                     {/* PESTAÑAS DE INFORMACIÓN DETALLADA */}
                     <div className="border-t border-gray-200">
                         {/* Navegación de pestañas */}
-                        <div className="flex border-b border-gray-200">
+                        <div className="flex overflow-x-auto whitespace-nowrap border-b border-gray-200">
                             {["description", "specs", "care"].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`flex-1 py-4 px-6 text-center font-medium ${
-                                        activeTab === tab
-                                            ? "text-cyan-600 border-b-2 border-cyan-600"
-                                            : "text-gray-500 hover:text-gray-700"
-                                    }`}
-                                >
-                                    {tab === "description"
-                                        ? "Descripción"
-                                        : tab === "specs"
-                                        ? "Especificaciones"
-                                        : "Cuidados"}
+                                    className={`flex-1 py-3 px-3 sm:px-6 text-sm sm:text-base text-center font-medium ${activeTab === tab ? "text-cyan-600 border-b-2 border-cyan-600" : "text-gray-500 hover:text-gray-700"}`}>
+                                    {tab === "description" ? "Descripción" : tab === "specs" ? "Especificaciones" : "Cuidados"}
                                 </button>
                             ))}
                         </div>
+
                         {/* Contenido de pestañas */}
-                        <div className="p-6">{renderTabContent()}</div>
+                        <div className="p-4 sm:p-6">{renderTabContent()}</div>
                     </div>
                 </div>
+
                 {/* 🆕 Sección de productos relacionados */}
                 <RelatedProducts product={product} navigate={navigate} />
+
+                {/* ✅ TOAST NOTIFICATION - Fuera del container principal */}
+                {showToast && (
+                    <div className="fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slideIn">
+                        <span>✅ ¡{quantity} {product.name} agregado(s) al carrito!</span>
+                    </div>
+                )}
+
+                {/* ✨ Animación del toast */}
+                <style>{`
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    .animate-slideIn { animation: slideIn 0.25s ease-out; }
+                `}</style>
             </div>
-
-            {/* ✅ TOAST NOTIFICATION - Fuera del container principal */}
-            {showToast && (
-                <div className="fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slideIn">
-                    <span>✅ ¡{quantity} {product.name} agregado(s) al carrito!</span>
-                </div>
-            )}
-
-            {/* ✨ Animación del toast */}
-            <style>{`
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                .animate-slideIn { animation: slideIn 0.3s ease-out; }
-            `}</style>
         </div>
     );
 }
