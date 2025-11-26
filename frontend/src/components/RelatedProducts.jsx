@@ -78,7 +78,7 @@ function RelatedProducts({ product, navigate }) {
             </h2>
 
             {/* Carrusel */}
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center w-full">
 
                 {/* Flecha izquierda (solo si hay más de visibleCount) */}
                 {relatedProducts.length > visibleCount && (
@@ -95,7 +95,10 @@ function RelatedProducts({ product, navigate }) {
                 )}
 
                 {/* Lista */}
-                <div className="flex gap-6 overflow-hidden px-6 sm:px-12 w-full max-w-[1200px]">
+                <div className="flex gap-6 overflow-hidden w-full max-w-[1200px]
+                mx-auto    /* ⭐ Centra carrusel COMPLETO */
+                transition-transform duration-300 ease-out
+                px-0 sm:px-0  /* ⭐ Quitamos padding que empujaba el carrusel */" >
                     {visibleProducts.map((rp) => (
                         <div
                             key={rp.id}

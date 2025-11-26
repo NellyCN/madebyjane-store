@@ -1,9 +1,18 @@
+// ======================================================
+// ProductDetail.jsx
+// Vista de detalle de producto: galería, variantes,
+// descripción extendida, tabla de tallas y acciones de compra.
+// ======================================================
+
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "../components/ui";
 import { useCart } from "../hooks/useCart";
 import { mockProducts } from "../data/mockProducts";
+import { sizeTables } from "../data/sizeTables";
+import SizeTable from "../components/SizeTable";
 import RelatedProducts from "../components/RelatedProducts";
+
 
 function ProductDetail() {
     // ======================================================
@@ -21,59 +30,42 @@ function ProductDetail() {
     // 2. STATES
     // ======================================================
 
-    /* -----------------------------------
-        🟦 ESTADOS BASE DEL PRODUCTO
-    ----------------------------------- */
+    // -------- 🟦 ESTADOS BASE DEL PRODUCTO --------   
+    const [quantity, setQuantity] = useState(1);                // Cantidad seleccionada
+    const [selectedSize, setSelectedSize] = useState(null);     // Talla seleccionada
+    const [selectedColor, setSelectedColor] = useState(null);   // Color seleccionado
+    const [variantError, setVariantError] = useState("");       // Error si falta elegir talla/color
+    const [activeImage, setActiveImage] = useState("");         // Imagen principal activa del slider
+    const [imageIndex, setImageIndex] = useState(0);            // Índice de la galería
 
-    // Cantidad seleccionada
-    const [quantity, setQuantity] = useState(1);
-
-    // 🆕 Estados nuevos para variantes seleccionadas
-    const [selectedSize, setSelectedSize] = useState(null);
-    const [selectedColor, setSelectedColor] = useState(null);
-
-    // 🆕 Estado para Errores de selección (tallas/colores)
-    const [variantError, setVariantError] = useState("");
-
-    // Imagen activa del slider
-    const [activeImage, setActiveImage] = useState("");
-
-    // Índice actual de la imagen en la galería
-    const [imageIndex, setImageIndex] = useState(0);
-
-    /* -----------------------------------
-        🟩 ESTADOS DE INTERFAZ (UI)
-    ----------------------------------- */
-
-    // Estado Pestaña activa (Descripción / Especificaciones / Cuidados)
-    const [activeTab, setActiveTab] = useState("description");
-
-    // Control del toast que aparece al agregar al carrito
-    const [showToast, setShowToast] = useState(false);
-
-    // Texto dinámico del botón "Agregar al carrito"
-    const [buttonText, setButtonText] = useState("");
+    // -------- 🟩 ESTADOS DE INTERFAZ (UI) --------
+    const [activeTab, setActiveTab] = useState("description");  // Tabs dinámicos (Desc/Espec/Cuidados)
+    const [showToast, setShowToast] = useState(false);          // Notificación de carrito
+    const [buttonText, setButtonText] = useState("");           // Texto del botón agregar al carrito
+    const [showSizeTable, setShowSizeTable] = useState(false);  // Mostrar/ocultar tabla de tallas
 
     // ======================================================
     // 3. EFFECTS
     // ======================================================
 
-    // Sync activeImage when product changes
+    // Actualiza imagen inicial y resetea variantes al cambiar de producto
     useEffect(() => {
         if (!product) return;
         // usa la primera imagen de gallery si existe, si no fallback a product.image
-        const first = (product.gallery && product.gallery.length > 0) ? product.gallery[0] : product.image || "";
-        setActiveImage(first);
+         const firstImage =
+            product.gallery?.length > 0 ? product.gallery[0] : product.image || "";
+        
+        setActiveImage(firstImage);
         setImageIndex(0);
         setSelectedColor(null);
         setSelectedSize(null);
         setVariantError("");
     }, [product]);
 
-
-    // 🔁 Actualiza texto del botón cuando cambia cantidad o producto
+    // 🔁 Actualiza texto del botón cuando cambia cantidad o stock
     useEffect(() => {
         if (!product) return;
+
             setButtonText(
                 product.stock === 0
                     ? "Producto Agotado"
@@ -109,7 +101,7 @@ function ProductDetail() {
     // 4. HANDLERS & FUNCTIONS
     // ======================================================
 
-    // 🛒 Agregar producto al carrito
+    // Validaciones + 🛒 Agregar al carrito
     const handleAddToCart = () => {
         // 🛑 Validación de variantes
         if (product.variants?.sizes?.length > 0 && !selectedSize) {
@@ -135,6 +127,7 @@ function ProductDetail() {
         
         setButtonText("¡Agregado! 🎉");
         setShowToast(true);
+        
         setTimeout(() => {
             setButtonText(
                 `Agregar ${quantity} al Carrito - $${(product.price * quantity).toFixed(2)}`
@@ -145,14 +138,13 @@ function ProductDetail() {
 
     // 🆕 Funciones del SLIDER (para cambiar imagen en galería)
     const prevImage = () => {
-        if (!product.gallery || product.gallery.length === 0) return;
+        if (!product.gallery?.length) return;
         const newIndex = (imageIndex - 1 + product.gallery.length) % product.gallery.length;
         setImageIndex(newIndex);
         setActiveImage(product.gallery[newIndex]);
     };
-
     const nextImage = () => {
-        if (!product.gallery || product.gallery.length === 0) return;
+        if (!product.gallery?.length) return;
         const newIndex = (imageIndex + 1) % product.gallery.length;
         setImageIndex(newIndex);
         setActiveImage(product.gallery[newIndex]);
@@ -161,8 +153,11 @@ function ProductDetail() {
     // ======================================================
     // 5. RENDER HELPERS
     // ======================================================
-
-    // 📑 Función para renderizar el Contenido de pestañas dinámico
+    
+    // 📌 Selecciona la Tabla de tallas según categoría y subcategoría
+    const table = sizeTables[product.subcategory];
+    
+    // 📑 Función para renderizar el Contenido dinámico de tabs
     const renderTabContent = () => {
         switch (activeTab) {
             case "description":
@@ -198,17 +193,9 @@ function ProductDetail() {
             case "specs":
                 return (
                     <div className="space-y-6">
-                        {/* Medidas */}
-                        {product.measurements && (
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                                Medidas y Tallas
-                                </h3>
-                                <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">
-                                    {product.measurements}
-                                </p>
-                            </div>
-                        )}
+
+                        {/* 🧵 Medidas y tallas*/}
+                        {table && <SizeTable table ={table} />}
 
                         {/* Stock y categoría */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -298,6 +285,7 @@ function ProductDetail() {
     return (
         <div className="min-h-screen bg-gray-50 pt-20">
             <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+                
                 {/* 🆕 Botón volver */}
                 <Button
                     variant="outline"
@@ -309,12 +297,17 @@ function ProductDetail() {
                 >
                     ← Volver
                 </Button>
-
-                {/* 🆕 CONTENIDO DEL PRODUCTO*/}
+                
+                {/* ========================= */}
+                {/* 🆕 CONTENIDO DEL PRODUCTO */}
+                {/* ========================= */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 p-3 sm:p-6">
 
-                        {/* 🖼️ Columna 1: Galería de imágenes */}
+                        {/* ========================= */}
+                        {/*      GALERÍA IMÁGENES     */}
+                        {/* ========================= */}
                         <div className="flex flex-col items-center">
                             {/* IMAGEN PRINCIPAL */}
                             <div className="relative bg-gray-100 rounded-lg p-4 sm:p-6 flex items-center justify-center w-full min-h-[320px] sm:min-h-[450px]">
@@ -329,11 +322,24 @@ function ProductDetail() {
                                 {product.gallery?.length > 1 && (
                                     <>
                                         <button onClick={prevImage} aria-label="Imagen anterior"
-                                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-90 rounded-full p-2 shadow hover:bg-opacity-100">
+                                            className="absolute left-2 top-1/2 -translate-y-1/2
+                                            bg-white/90 backdrop-blur-sm shadow
+                                            rounded-full flex items-center justify-center
+                                            w-8 h-8 text-lg
+                                            hover:bg-white
+                                            transition
+                                            sm:w-10 sm:h-10 sm:text-xl">
                                             ←
                                         </button>
-                                        <button onClick={nextImage} aria-label="Imagen siguiente"
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-90 rounded-full p-2 shadow hover:bg-opacity-100">
+                                        <button onClick={nextImage}     
+                                            aria-label="Imagen siguiente"
+                                            className="absolute right-2 top-1/2 -translate-y-1/2
+                                            bg-white/90 backdrop-blur-sm shadow
+                                            rounded-full flex items-center justify-center
+                                            w-8 h-8 text-lg
+                                            hover:bg-white
+                                            transition
+                                            sm:w-10 sm:h-10 sm:text-xl">
                                             →
                                         </button>
                                     </>
@@ -342,7 +348,9 @@ function ProductDetail() {
 
                             {/* MINIATURAS DEBAJO */}
                             {product.gallery?.length > 0 && (
-                                <div className="flex gap-3 mt-4 justify-center">
+                                <div className="mt-4 flex gap-3 justify-start 
+                                                overflow-x-auto no-scrollbar
+                                                lg:grid lg:grid-cols-6 lg:gap-3 lg:overflow-visible">
                                     {product.gallery.map((img, index) => (
                                         <img
                                             key={index}
@@ -351,9 +359,8 @@ function ProductDetail() {
                                                 setActiveImage(img)
                                                 setImageIndex(index);
                                             }}
-                                            // alt={`Miniatura ${index + 1}`}
-                                            className={`w-20 h-20 object-cover rounded-lg border cursor-pointer transition ${
-                                                activeImage === img
+                                            className={`w-20 h-20 object-cover rounded-lg border cursor-pointer transition
+                                                ${activeImage === img
                                                     ? "border-cyan-600 shadow-md"
                                                     : "border-gray-300 hover:border-cyan-400"
                                             }`}
@@ -363,17 +370,20 @@ function ProductDetail() {
                             )}
                         </div>
 
-                        {/* 📋 Columna 2: Información del producto */}
+                        {/* ========================= */}
+                        {/*   INFORMACIÓN PRODUCTO    */}
+                        {/* ========================= */}
                         <div>
+                            {/* Título / Precio / Descripción */}
                             <h1 className="text-3xl font-bold text-gray-800 mb-3">{product.name}</h1>
                             <p className="text-2xl font-bold text-cyan-600 mb-4">${product.price}</p>
                             {/* Descripción corta */}
                             <p className="text-gray-600 mb-4 text-lg leading-relaxed">{product.description}</p>
     
-                            {/* 🆕 Variantes de tallas */}
+                            {/* 🆕 Variantes - Selector de tallas */}
                             {product.variants?.sizes?.length > 0 && (
                                 <div className="mb-4">
-                                    <span className="block text-gray-700 font-medium mb-2">Talla:</span>
+                                    <span className="block text-gray-700 font-medium mb-1">Talla:</span>
                                     <div className="flex flex-wrap gap-2">
                                         {product.variants.sizes.map((size) => (
                                             <button key={size.name} onClick={() => setSelectedSize(size.name)}
@@ -385,7 +395,19 @@ function ProductDetail() {
                                 </div>
                             )}
 
-                            {/* 🆕 Variantes de colores */}
+                            {/* 🔽 Ajuste del espacio del link */}
+                            {table && (
+                                <button
+                                    onClick={() => setShowSizeTable(!showSizeTable)}
+                                    className="mt-1 mb-4 text-cyan-600 underline text-sm hover:text-cyan-800"
+                                >
+                                    {showSizeTable ? "Ocultar guía de tallas" : "Ver guía de tallas"}
+                                </button>
+                            )}
+
+                            {showSizeTable && <SizeTable table={table} />}
+    
+                            {/* 🆕 Variantes - Selector de colores */}
                             {product.variants?.colors?.length > 0 && (
                                 <div className="mb-4">
                                     <span className="block text-gray-700 font-medium mb-2">Color:</span>
@@ -409,7 +431,7 @@ function ProductDetail() {
                                 </div>
                             )}
 
-                            {/* 🔢 Selector de cantidad */}
+                            {/* 🔢 Variantes - Selector de cantidad */}
                             <div className="flex items-center gap-4 mb-6">
                                 <span className="text-gray-700 font-medium">Cantidad:</span>
                                 <div className="flex items-center gap-2">
@@ -450,7 +472,7 @@ function ProductDetail() {
                         </div>
                     </div>
 
-                    {/* PESTAÑAS DE INFORMACIÓN DETALLADA */}
+                    {/* PESTAÑAS + INFORMACIÓN DETALLADA */}
                     <div className="border-t border-gray-200">
                         {/* Navegación de pestañas */}
                         <div className="flex overflow-x-auto whitespace-nowrap border-b border-gray-200">
@@ -469,7 +491,7 @@ function ProductDetail() {
                     </div>
                 </div>
 
-                {/* 🆕 Sección de productos relacionados */}
+                {/* 🆕 Sección de Productos Relacionados */}
                 <RelatedProducts product={product} navigate={navigate} />
 
                 {/* ✅ TOAST NOTIFICATION - Fuera del container principal */}
