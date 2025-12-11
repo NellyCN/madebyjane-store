@@ -1,4 +1,4 @@
-// frontend/src/pages/Cart.jsx
+
 import CartPanel from '../components/CartPanel'
 
 function Cart() {

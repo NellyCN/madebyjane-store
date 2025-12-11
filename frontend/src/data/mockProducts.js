@@ -215,7 +215,27 @@ export const mockProducts = [
     category: "crochet",
     subcategory: "bikinis",
     image: "https://i.pinimg.com/1200x/0e/b2/2d/0eb22df83ba177c4e356a47ffd488abe.jpg",
-    tags: ["verano", "playa"]
+    tags: ["verano", "playa"],
+    // 🧩 Variantes y galería nuevas
+    variants: {
+      colors: [
+        { name: "Brown", hex: "#6b584cff", image: "https://i.pinimg.com/1200x/0e/b2/2d/0eb22df83ba177c4e356a47ffd488abe.jpg" },
+        { name: "Rosa", hex: "#eeacdcff", image: "https://i.pinimg.com/736x/80/34/ab/8034ab897d3440df47748756e1cf3348.jpg" }, 
+        { name: "Celeste", hex: "#419fe2ff", image: "https://i.pinimg.com/1200x/e0/e1/6b/e0e16bd2447c789d8821818ed39af5e5.jpg" }, 
+      ],
+      sizes: [
+        { name: "32", measurements: "" },
+        { name: "34", measurements: "" },
+        { name: "36", measurements: "" },
+        { name: "38", measurements: "" },
+        { name: "40", measurements: "" }
+      ],
+      gallery: [
+        "https://i.pinimg.com/1200x/0e/b2/2d/0eb22df83ba177c4e356a47ffd488abe.jpg",
+        "https://i.pinimg.com/736x/80/34/ab/8034ab897d3440df47748756e1cf3348.jpg",
+        "https://i.pinimg.com/1200x/e0/e1/6b/e0e16bd2447c789d8821818ed39af5e5.jpg"
+      ]  
+    },
   },
   {
     id: 7,
@@ -601,7 +621,7 @@ export const mockProducts = [
     subcategory: "bikinis",
     image: "https://i.pinimg.com/736x/53/26/87/5326878f5339916eaa8a4909089c9aa3.jpg",
     tags: ["nuevo", "popular", "artesanal"],
-        // 🧩 Variantes y galería nuevas
+    // 🧩 Variantes y galería nuevas
     variants: {
       colors: [
         { name: "Perla", hex: "#fbf8e5ff", image: "https://i.pinimg.com/736x/57/80/dd/5780dd8cae668995c5483616dcff1d5e.jpg" },

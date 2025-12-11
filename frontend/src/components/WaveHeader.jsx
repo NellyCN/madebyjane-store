@@ -71,33 +71,36 @@ function WaveHeader() {
 
   return (
     <header className="bg-cyan-600 text-white shadow-md sticky top-0 z-50">
-      <nav className="container mx-auto px-3 sm:px-4">  {/* px-3 Menos padding y márgenes */}
-        
+      <nav className="container mx-auto px-3 sm:px-4">
+        {" "}
+        {/* px-3 Menos padding y márgenes */}
         {/* Main nav bar */}
-        <div className="flex justify-between items-center py-3">{/* py-3 padding y márgenes- Header principal*/}
-        
+        <div className="flex justify-between items-center py-3">
+          {/* py-3 padding y márgenes- Header principal*/}
+
           {/* Logo - smaller on mobile 
           📱 MÓVIL + 🖥️ MD + 💻 LG+ - aplica diferentes estilos por breakpoint*/}
           <h1 className="text-lg sm:text-xl md:text-2xl font-bold truncate">
             MadeByJane
           </h1>
-        
+
           {/* Desktop Navigation - hidden on mobile */}
           <ul className="hidden md:flex gap-4 lg:gap-6">
-          {/* <ul className="flex gap-6"> */}
+            {/* <ul className="flex gap-6"> */}
             {navItems.map((item) => {
-              const IconComponent = item.icon
-              const active = item.isActive()
-              
+              const IconComponent = item.icon;
+              const active = item.isActive();
+
               return (
                 <li key={item.to}>
-                  <Link 
+                  <Link
                     to={item.to}
                     className={`
                       flex items-center gap-1 lg:gap-2 transition-all duration-200 font-medium px-2 py-1 rounded-lg text-sm lg:text-base
-                      ${active 
-                        ? 'text-white bg-cyan-700 shadow-inner' 
-                        : 'text-cyan-100 hover:text-white hover:bg-cyan-500'
+                      ${
+                        active
+                          ? "text-white bg-cyan-700 shadow-inner"
+                          : "text-cyan-100 hover:text-white hover:bg-cyan-500"
                       }
                     `}
                   >
@@ -110,44 +113,52 @@ function WaveHeader() {
           </ul>
 
           {/* 📱 Mobile Menu Button (default) - se aplica a TODOS los tamaños */}
-          <button 
+          <button
             className="md:hidden p-1 rounded-lg hover:bg-cyan-500 transition"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-        </div>  
-      
-      
+        </div>
         {/* Mobile Menu - More compact design */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-cyan-700 border-t border-cyan-500 animate-slideDown">
-            <ul className="py-2 flex flex-col"> {/* py-2 padding y márgenes-Menú móvil*/}
+            <ul className="py-2 flex flex-col">
+              {" "}
+              {/* py-2 padding y márgenes-Menú móvil*/}
               {navItems.map((item, index) => {
-                const IconComponent = item.icon
-                const active = item.isActive()
-                
+                const IconComponent = item.icon;
+                const active = item.isActive();
+
                 return (
                   // Separadores entre items en lugar de gap grande
-                  <li key={item.to} className={index !== navItems.length - 1 ? 'border-b border-cyan-600' : ''}>
-
-                    <Link 
+                  <li
+                    key={item.to}
+                    className={
+                      index !== navItems.length - 1
+                        ? "border-b border-cyan-600"
+                        : ""
+                    }
+                  >
+                    <Link
                       to={item.to}
                       onClick={closeMobileMenu}
                       className={`
                         flex items-center gap-3 p-2 transition-all duration-150 font-medium
-                        ${active 
-                          ? 'bg-cyan-800 text-white' 
-                          : 'text-cyan-100 hover:bg-cyan-600 hover:text-white'
+                        ${
+                          active
+                            ? "bg-cyan-800 text-white"
+                            : "text-cyan-100 hover:bg-cyan-600 hover:text-white"
                         }
                       `}
                     >
-
                       {/* Iconos reducidos para móvil */}
                       <IconComponent size={18} className="flex-shrink-0" />
 
-                      <span className="text-sm whitespace-nowrap">{item.mobileLabel}</span>
+                      <span className="text-sm whitespace-nowrap">
+                        {item.mobileLabel}
+                      </span>
                     </Link>
                   </li>
                 );
@@ -155,9 +166,9 @@ function WaveHeader() {
             </ul>
           </div>
         )}
-    </nav> 
+      </nav>
 
-    {/* CSS for slide down animation */}
+      {/* CSS for slide down animation */}
       <style jsx="true">{`
         @keyframes slideDown {
           from {
