@@ -4,13 +4,48 @@ import { Button } from './ui';
 function CartPanel() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart();
 
+    const handleCheckoutWhatsApp = () => {
+    const phoneNumber = "51997473711";
+
+    if (items.length === 0) {
+      alert("Tu carrito está vacío 🙈");
+      return;
+    }
+
+    // 🧩 Encabezado del mensaje
+    let message = "Hola MadeByJane 👋✨%0AQuiero finalizar mi compra.%0A%0A";
+
+    message += "🛒 *Mi Carrito:*%0A";
+
+    // 🧩 Agregar cada producto del carrito (nombre — cantidad — precio total)
+    items.forEach(item => {
+      const itemTotal = (item.price * item.quantity).toFixed(2);
+      message += `• ${item.name} — Cant: ${item.quantity} — S/.${itemTotal}%0A`;
+    });
+
+    // 🧩 Resumen
+    message += `%0A------------------------%0A`;
+    message += `Subtotal: S/.${subtotal.toFixed(2)}%0A`;
+    message += `IGV (18%): S/.${igv.toFixed(2)}%0A`;
+    message += `Envío: ${shippingCost === 0 ? "GRATIS" : "S/." + shippingCost.toFixed(2)}%0A`;
+    message += `------------------------%0A`;
+    message += `*Total a pagar: S/.${finalTotal.toFixed(2)}*%0A`;
+
+    // 🧩 Crear URL final
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+    // 🧩 Abrir WhatsApp
+    window.open(url, "_blank");
+  };
+
+
   // Cálculos adicionales
   const subtotal = total;
   const igv = subtotal * 0.18;
   const shippingCost = subtotal > 100 ? 0 : 15; // Envío gratis sobre $100
   const finalTotal = subtotal + shippingCost;
 
-
+  // Renderizado cuando el carrito está vacío
   if (items.length === 0) {
     return (
       <div className="text-center py-12">
@@ -143,7 +178,7 @@ function CartPanel() {
           <Button 
             variant="primary" 
             className="flex-1"
-            onClick={() => alert('¡Checkout implementado próximamente!')}
+            onClick={handleCheckoutWhatsApp}
           >
             Proceder al Pago
           </Button>
