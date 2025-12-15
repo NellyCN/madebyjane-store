@@ -1,40 +1,28 @@
 import { useCart } from '../hooks/useCart';
 import { Button } from './ui';
+import { generateWhatsAppMessage } from '../services/whatsappMessage';
+
 
 function CartPanel() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart();
 
     const handleCheckoutWhatsApp = () => {
-    const phoneNumber = "51997473711";
-
-    if (items.length === 0) {
-      alert("Tu carrito está vacío 🙈");
-      return;
+      if (items.length === 0) {
+        alert("Tu carrito está vacío");
+        return;
     }
 
-    // 🧩 Encabezado del mensaje
-    let message = "Hola MadeByJane 👋✨%0AQuiero finalizar mi compra.%0A%0A";
-
-    message += "🛒 *Mi Carrito:*%0A";
-
-    // 🧩 Agregar cada producto del carrito (nombre — cantidad — precio total)
-    items.forEach(item => {
-      const itemTotal = (item.price * item.quantity).toFixed(2);
-      message += `• ${item.name} — Cant: ${item.quantity} — S/.${itemTotal}%0A`;
+    const message = generateWhatsAppMessage({
+      items,
+      subtotal,
+      igv,
+      shippingCost,
+      finalTotal,
+      deliveryMethod: "Envío a domicilio / Recojo"
     });
 
-    // 🧩 Resumen
-    message += `%0A------------------------%0A`;
-    message += `Subtotal: S/.${subtotal.toFixed(2)}%0A`;
-    message += `IGV (18%): S/.${igv.toFixed(2)}%0A`;
-    message += `Envío: ${shippingCost === 0 ? "GRATIS" : "S/." + shippingCost.toFixed(2)}%0A`;
-    message += `------------------------%0A`;
-    message += `*Total a pagar: S/.${finalTotal.toFixed(2)}*%0A`;
-
-    // 🧩 Crear URL final
+    const phoneNumber = "51997473711";
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-    // 🧩 Abrir WhatsApp
     window.open(url, "_blank");
   };
 
