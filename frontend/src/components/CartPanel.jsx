@@ -1,31 +1,13 @@
 import { useCart } from '../hooks/useCart';
 import { Button } from './ui';
-import { generateWhatsAppMessage } from '../services/whatsappMessage';
+import CheckoutForm from "./checkout/CheckoutForm";
 
+import { generateOrderCode } from '../services/orderService';
+import { generateWhatsAppMessage } from '../services/whatsappMessage';
+import { sendWhatsAppMessage } from '../services/whatsappSender';
 
 function CartPanel() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart();
-
-    const handleCheckoutWhatsApp = () => {
-      if (items.length === 0) {
-        alert("Tu carrito está vacío");
-        return;
-    }
-
-    const message = generateWhatsAppMessage({
-      items,
-      subtotal,
-      igv,
-      shippingCost,
-      finalTotal,
-      deliveryMethod: "Envío a domicilio / Recojo"
-    });
-
-    const phoneNumber = "51997473711";
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
-  };
-
 
   // Cálculos adicionales
   const subtotal = total;
@@ -33,10 +15,39 @@ function CartPanel() {
   const shippingCost = subtotal > 100 ? 0 : 15; // Envío gratis sobre $100
   const finalTotal = subtotal + shippingCost;
 
+  const handleCheckoutConfirm = (checkoutFormData) => {
+    if (items.length === 0) {
+      alert("Tu carrito está vacío");
+      return;
+    }
+
+    const orderCode = generateOrderCode();
+
+    const checkoutData = {
+      orderCode,
+      items,
+      subtotal,
+      igv,
+      shippingCost,
+      total: finalTotal,
+      deliveryMethod:
+        checkoutFormData.deliveryType === "delivery"
+          ? "Envío a domicilio"
+          : "Recojo previa coordinación",
+      address: checkoutFormData.address,
+      paymentMethod: checkoutFormData.paymentMethod
+    };
+
+    localStorage.setItem("mbj-last-order", orderCode);
+
+    const message = generateWhatsAppMessage(checkoutData);
+    sendWhatsAppMessage(message);
+  };
+
   // Renderizado cuando el carrito está vacío
   if (items.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12 text-gray-500">
         <div className="text-gray-400 text-6xl mb-4">🛒</div>
         <h3 className="text-xl font-semibold text-gray-600 mb-2">
           Tu carrito está vacío
@@ -63,6 +74,9 @@ function CartPanel() {
           Vaciar Carrito
         </Button>
       </div>
+
+      {/* listado de productos */}
+      {/* resumen de compra */}
 
       {/* Lista de Productos */}
       <div className="space-y-4 mb-8">
@@ -128,10 +142,12 @@ function CartPanel() {
             <span>Subtotal:</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
+
           <div className="flex justify-between">
             <span>IGV (18%):</span>
             <span>${igv.toFixed(2)}</span>
           </div>
+
           <div className="flex justify-between">
             <span>Envío:</span>
             <span>
@@ -142,6 +158,7 @@ function CartPanel() {
               )}
             </span>
           </div>
+
           {shippingCost > 0 && subtotal < 100 && (
             <p className="text-sm text-green-600 text-center py-2 bg-green-50 rounded">
               ¡Faltan ${(100 - subtotal).toFixed(2)} para envío gratis!
@@ -153,24 +170,14 @@ function CartPanel() {
             <span className="text-cyan-600">${finalTotal.toFixed(2)}</span>
           </div>
         </div>
-        
-        {/* 🆕 BOTONES DENTRO DEL MISMO CARD */}
-        <div className="flex gap-3">
-          <Button 
-            variant="outline" 
-            className="flex-1"
-            onClick={() => window.history.back()}
-          >
-            Seguir Comprando
-          </Button>
-          <Button 
-            variant="primary" 
-            className="flex-1"
-            onClick={handleCheckoutWhatsApp}
-          >
-            Proceder al Pago
-          </Button>
-        </div>
+      </div>
+
+      <CheckoutForm onConfirm={handleCheckoutConfirm} />
+
+      <div className="mt-4">
+        <Button variant="outline" onClick={() => window.history.back()}>
+          Seguir Comprando
+        </Button>
       </div>
     </div>
   );
