@@ -5,6 +5,33 @@ import { generateWhatsAppMessage } from '../services/whatsappMessage';
 import { sendWhatsAppMessage } from '../services/whatsappSender';
 import { useState } from 'react';
 
+const paymentMethods = [
+  {
+    value: "Yape",
+    label: "Yape",
+    icons: ["/payments/yape-logo.png"]
+  },
+  {
+    value: "Plin",
+    label: "Plin",
+    icons: ["/payments/plin-logo.png"]
+  },
+  {
+    value: "Transferencia",
+    label: "Transferencia bancaria",
+    icons: [
+            "/payments/bcp-logo.jpg",
+            "/payments/ibk-logo.png"
+            ]
+
+  },
+  {
+    value: "Tarjeta de Crédito (Link MercadoPago)",
+    label: "Tarjeta de crédito (Mercado Pago)",
+    icons: ["/payments/mercadopago-logo.png"]
+  }
+];
+
 function CartPanel() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart();
 
@@ -96,6 +123,9 @@ function CartPanel() {
     const message = generateWhatsAppMessage(checkoutData);
     sendWhatsAppMessage(message);
   };
+
+  
+
 
   /* ======================
      CARRITO VACÍO
@@ -333,29 +363,47 @@ function CartPanel() {
             onOpen={() => setOpenSection("payment")}
           >
             <div className="space-y-3">
-              {["Yape", "Plin", "Transferencia", "Tarjeta de Crédito (Link MercadoPago)"].map(m => (
+              {paymentMethods.map(method => (
                 <label
-                  key={m}
-                  className="flex items-center gap-3 cursor-pointer"
+                  key={method.value}
+                  className={`flex items-center gap-3 cursor-pointer border rounded-lg p-3 hover:bg-gray-50 transition
+                    ${checkoutFormData.paymentMethod === method.value ? "border-cyan-600 bg-cyan-50" : "hover:bg-gray-50"}
+                  `}
                 >
                   <input
                     type="radio"
                     className="accent-cyan-600"
-                    checked={checkoutFormData.paymentMethod === m}
-                    onChange={() => updateCheckoutField("paymentMethod", m)}
+                    checked={checkoutFormData.paymentMethod === method.value}
+                    onChange={() => updateCheckoutField("paymentMethod", method.value)
+                    }
                   />
-                  <span>{m}</span>
-              </label>
-            ))}
-          </div>
 
-          <Button
-            className="w-full bg-cyan-600 hover:bg-cyan-700 mt-4"
-            onClick={handleCheckoutConfirm}
-          >
-            Confirmar pedido y enviar por WhatsApp
-          </Button>
-          
+                  {/* ICONOS */}
+                  <div className="flex items-center gap-2">
+                    {method.icons.map((icon, idx) => (
+                      <img
+                        key={idx}
+                        src={icon}
+                        alt={method.label}
+                        className="w-7 h-7 object-contain"
+                      />
+                    ))}
+                  </div>
+
+                  <span className="text-sm font-medium">
+                    {method.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            <Button
+              className="w-full bg-cyan-600 hover:bg-cyan-700 mt-4"
+              onClick={handleCheckoutConfirm}
+            >
+              Confirmar pedido y enviar por WhatsApp
+            </Button>
+            
           </AccordionSection>
         </div>
 
