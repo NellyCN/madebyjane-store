@@ -69,7 +69,7 @@ function ProductDetail() {
             setButtonText(
                 product.stock === 0
                     ? "Producto Agotado"
-                    : `Agregar ${quantity} al Carrito - $${(
+                    : `Agregar ${quantity} al Carrito - S/. ${(
                         product.price * quantity
                     ).toFixed(2)}`
             );
@@ -130,7 +130,7 @@ function ProductDetail() {
         
         setTimeout(() => {
             setButtonText(
-                `Agregar ${quantity} al Carrito - $${(product.price * quantity).toFixed(2)}`
+                `Agregar ${quantity} al Carrito - S/. ${(product.price * quantity).toFixed(2)}`
             );
             setShowToast(false);
         }, 1400);
@@ -376,7 +376,7 @@ function ProductDetail() {
                         <div>
                             {/* Título / Precio / Descripción */}
                             <h1 className="text-3xl font-bold text-gray-800 mb-3">{product.name}</h1>
-                            <p className="text-2xl font-bold text-cyan-600 mb-4">${product.price}</p>
+                            <p className="text-2xl font-bold text-cyan-600 mb-4">S/. {product.price.toFixed(2)}</p>
                             {/* Descripción corta */}
                             <p className="text-gray-600 mb-4 text-lg leading-relaxed">{product.description}</p>
     

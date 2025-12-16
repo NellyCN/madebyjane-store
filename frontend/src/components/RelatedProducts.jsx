@@ -130,7 +130,7 @@ function RelatedProducts({ product, navigate }) {
                                 <h3 className="font-semibold text-gray-800 mb-1 text-sm line-clamp-2">
                                     {rp.name}
                                 </h3>
-                                <p className="text-cyan-600 font-bold text-lg">${rp.price}</p>
+                                <p className="text-cyan-600 font-bold text-sm">S/. {rp.price.toFixed(2)}</p>
                                 <p className="text-gray-500 text-xs mt-1">
                                     {rp.stock > 0
                                         ? `${rp.stock} disponibles`

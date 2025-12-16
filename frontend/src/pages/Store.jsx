@@ -338,7 +338,7 @@ function Store() {
               {shippingCost > 0 && remainingForFreeShipping > 0 ? (
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-2">
                   <p className="text-xs text-amber-800 text-center">
-                    <span className="font-semibold">¡Faltan ${remainingForFreeShipping.toFixed(2)}</span> para envío gratis
+                    <span className="font-semibold">¡Faltan S/. {remainingForFreeShipping.toFixed(2)}</span> para envío gratis
                   </p>
                 </div>
               ) : shippingCost === 0 ? (
@@ -364,8 +364,8 @@ function Store() {
                     />
                     <div className="flex-grow min-w-0">
                       <p className="text-sm font-medium truncate">{item.name}</p>
-                      <p className="text-xs text-gray-600">${item.price} x {item.quantity}</p>
-                      <p className="text-xs font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-xs text-gray-600">S/. {item.price.toFixed(2)} x {item.quantity}</p>
+                      <p className="text-xs font-semibold">S/. {(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                     <button 
                       onClick={() => removeFromCart(item.id)}
@@ -383,7 +383,7 @@ function Store() {
               <div className="space-y-2 text-sm mb-3">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>S/. {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Envío:</span>
@@ -391,14 +391,14 @@ function Store() {
                     {shippingCost === 0 ? (
                       <span className="text-green-600 font-semibold">GRATIS</span>
                     ) : (
-                      `$${shippingCost.toFixed(2)}`
+                      `S/. ${shippingCost.toFixed(2)}`
                     )}
                   </span>
                 </div>
                 <hr />
                 <div className="flex justify-between font-semibold text-base">
                   <span>Total:</span>
-                  <span className="text-cyan-600">${finalTotal.toFixed(2)}</span>
+                  <span className="text-cyan-600">S/. {finalTotal.toFixed(2)}</span>
                 </div>
               </div>
               

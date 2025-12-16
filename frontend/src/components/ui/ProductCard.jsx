@@ -115,8 +115,8 @@ export function ProductCard({ product, onAddToCart }) {
 
         {/* Price and Stock */}
         <div className="flex justify-between items-center mb-3">
-          <span className="text-2xl font-bold text-cyan-600">
-            ${price}
+          <span className="text-xl font-bold text-cyan-600">
+            S/. {price.toFixed(2)}
           </span>
           <div className="text-right">
             <div className={`text-sm ${isLowStock ? 'text-orange-600' : 'text-gray-600'}`}>
