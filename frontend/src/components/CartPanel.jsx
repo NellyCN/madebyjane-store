@@ -5,6 +5,9 @@ import { generateWhatsAppMessage } from '../services/whatsappMessage';
 import { sendWhatsAppMessage } from '../services/whatsappSender';
 import { useState } from 'react';
 
+/* ==========================
+    OBJETO MÉTODOS DE PAGO
+  ========================== */
 const paymentMethods = [
   {
     value: "Yape",
@@ -23,7 +26,6 @@ const paymentMethods = [
             "/payments/bcp-logo.jpg",
             "/payments/ibk-logo.png"
             ]
-
   },
   {
     value: "Tarjeta de Crédito (Link MercadoPago)",
@@ -69,6 +71,11 @@ function CartPanel() {
       [field]: value
     }));
   };
+
+  /* ======================
+      ESTADO DEL MODAL
+  ====================== */
+  const [showConfirm, setShowConfirm] = useState(false);
 
   /* ======================
       CONFIRMACIÓN FINAL
@@ -124,11 +131,8 @@ function CartPanel() {
     sendWhatsAppMessage(message);
   };
 
-  
-
-
   /* ======================
-     CARRITO VACÍO
+      CARRITO VACÍO
   ====================== */
   if (items.length === 0) {
     return (
@@ -179,6 +183,8 @@ function CartPanel() {
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="font-semibold text-gray-800">{item.name}</h3>
                 <p className="text-gray-600 text-sm">S/. {item.price.toFixed(2)}</p>
+                <p className="text-gray-500 text-sm">Talla: {item.selectedSize}</p>
+                <p className="text-gray-500 text-sm">Color: {item.selectedColor}</p>
                 <p className="text-gray-500 text-xs">Categoría: {item.category}</p>
               </div>
 
@@ -399,9 +405,9 @@ function CartPanel() {
 
             <Button
               className="w-full bg-cyan-600 hover:bg-cyan-700 mt-4"
-              onClick={handleCheckoutConfirm}
+              onClick={() => setShowConfirm(true)}
             >
-              Confirmar pedido y enviar por WhatsApp
+              Confirmar pedido
             </Button>
             
           </AccordionSection>
@@ -420,13 +426,107 @@ function CartPanel() {
             Seguir Comprando
           </Button>
         </div>
+
+
+        {/* ==============================
+            🪟COMPONENTE MODAL SIMPLE
+        ============================== */}
+        {showConfirm && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-[90%] max-w-md space-y-4">
+              
+              <h3 className="text-lg font-bold text-center bg-cyan-100 text-cyan-800 rounded-lg px-3 py-1">
+                Revisa tu pedido 🧾
+              </h3>
+
+              {/* PRODUCTOS */}
+              <div className="space-y-2 max-h-40 overflow-auto border rounded-md p-3 bg-gray-50">
+                {items.map(item => (
+                  <div key={item.id} className="text-sm">
+                    <p className="font-medium text-gray-800">
+                      {item.name} x {item.quantity}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      Talla: {item.selectedSize} · Color: {item.selectedColor}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* RESUMEN */}
+              <div className="text-sm space-y-1 border-t pt-3">
+                <p className="flex justify-between">
+                  <span>Total</span>
+                  <strong>S/. {finalTotal.toFixed(2)}</strong>
+                </p>
+
+                <p className="flex justify-between">
+                  <span>Pago</span>
+                  <span>{checkoutFormData.paymentMethod}</span>
+                </p>
+
+                <p className="flex justify-between">
+                  <span>Entrega</span>
+                  <span>
+                    {checkoutFormData.deliveryType === "delivery"
+                      ? "Envío a domicilio"
+                      : "Recojo previa coordinación"}
+                  </span>
+                </p>
+              </div>
+
+              {/* MENSAJE */}
+              <p className="text-xs text-gray-500 text-center">
+                Podrás coordinar el pago y la entrega en el siguiente paso
+              </p>
+
+              {/* <div className="text-sm space-y-2 max-h-40 overflow-auto">
+                {items.map(item => (
+                  <p key={item.id}>
+                    <strong>- </strong>{item.name}
+                      (<strong>Talla: </strong>{item.selectedSize}, <strong>Color: </strong>{item.selectedColor}) x {item.quantity}
+                  </p>
+                ))}
+                <p><strong>Total:</strong> S/. {finalTotal.toFixed(2)}</p>
+                <p><strong>Pago:</strong> {checkoutFormData.paymentMethod}</p>
+                <p><strong>Entrega:</strong> {
+                  checkoutFormData.deliveryType === "delivery"
+                    ? "Envío a domicilio"
+                    : "Recojo previa coordinación"
+                }</p>
+                <p className="text-xs text-gray-500 text-center">
+                  Podrás coordinar el pago y entrega en el siguiente paso
+                </p>
+              </div> */}
+
+
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setShowConfirm(false)}
+                >
+                  Editar
+                </Button>
+
+                <Button
+                  className="w-full bg-cyan-600 hover:bg-cyan-700"
+                  onClick={handleCheckoutConfirm}
+                >
+                  Confirma tu pedido
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     );
   }
 
-/* ======================
-    COMPONENTE SIMPLE
-====================== */
+/* ==============================
+    COMPONENTE ACORDEÓN SIMPLE
+============================== */
 function AccordionSection({ title, isOpen, onOpen, children }) {
   return (
     <div className="border rounded-lg overflow-hidden bg-white">
@@ -438,11 +538,16 @@ function AccordionSection({ title, isOpen, onOpen, children }) {
         <span className="text-xl">{isOpen ? "−" : "+"}</span>
       </button>
       
-      {isOpen && (
+      <div
+        className={`
+          overflow-hidden transition-all duration-300 ease-in-out
+          ${isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}
+        `}
+      >
         <div className="p-4 border-t space-y-4">
           {children}
         </div>
-      )}
+      </div>
     </div>
   );
 }

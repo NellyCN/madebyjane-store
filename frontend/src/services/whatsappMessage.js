@@ -24,10 +24,13 @@ Quiero finalizar mi compra.
 
 `;
 
-    items.forEach(item => {
-        message += `- ${item.name}
-    Cantidad: ${item.quantity}
-    Subtotal: S/. ${(item.price * item.quantity).toFixed(2)}
+    items.map(item => {
+
+        message += `• ${item.name}
+        Talla: ${item.selectedSize}
+        Color: ${item.selectedColor}     
+        Cantidad: ${item.quantity}
+        Subtotal: S/. ${(item.price * item.quantity).toFixed(2)}
 
 `;
     });
@@ -46,7 +49,7 @@ Envío        : ${shippingCost === 0 ? "GRATIS" : "S/. " + shippingCost}
 ${deliveryMethod}
 ${address ? 'Dirección: ' + address : ''}
 
-MÉTODO DE PAGO:
+*MÉTODO DE PAGO:*
 ${paymentMethod}
 
 Gracias.

@@ -7,8 +7,8 @@ export default function PaymentMethods({ paymentMethod, setPaymentMethod }) {
                 "Yape",
                 "Plin",
                 "Transferencia bancaria",
-                "Tarjeta (Visa / Mastercard / Amex / Diners)",
-                "Mercado Pago"
+                "Tarjeta Crédito (MercadoPago) (Visa / Mastercard / Amex / Diners)",
+                
             ].map(method => (
                 <label key={method} className="flex items-center gap-2 text-sm">
                     <input
