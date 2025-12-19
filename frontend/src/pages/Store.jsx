@@ -48,16 +48,21 @@ function Store() {
    * Función para manejar agregar al carrito
    */
   const handleAddToCart = (product) => {
+
     addToCart(product)
-    // 🆕 Feedback visual temporal (puedes mejorar esto después)
+
+    // 🆕 Feedback visual temporal
     const button = document.querySelector(`[data-product-id="${product.id}"]`)
+    
     if (button) {
       button.textContent = '¡Agregado!'
       button.classList.add('bg-green-500')
+      
       setTimeout(() => {
         button.textContent = 'Agregar al Carrito'
         button.classList.remove('bg-green-500')
       }, 1500)
+    
     }
   }
 

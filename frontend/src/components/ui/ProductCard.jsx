@@ -66,6 +66,8 @@ export function ProductCard({ product, onAddToCart }) {
     })
   }
 
+  const requiresVariants = product.requiresVariants === true;
+
   return (
     <Card className="overflow-hidden cursor-pointer"> {/* 🆕 AGREGANDO cursor-pointer */}
 
@@ -141,12 +143,18 @@ export function ProductCard({ product, onAddToCart }) {
           disabled={isOutOfStock}
           onClick={(e) => {
             e.stopPropagation(); // 🆕 IMPORTANTE: Evitar que el click navegue a la página de detalle
-            onAddToCart && onAddToCart(product);
+
+            if (requiresVariants) {
+              navigate(`/producto/${product.id}`);
+            } else {
+              onAddToCart && onAddToCart(product);
+            }
           }}
           className="w-full"
         >
-          {isOutOfStock ? 'Agotado' : 'Agregar al Carrito'}
+          {isOutOfStock ? 'Agotado' : requiresVariants ? 'Ver Producto' : 'Agregar al Carrito'}
         </Button>
+        
       </div>
     </Card>
   )

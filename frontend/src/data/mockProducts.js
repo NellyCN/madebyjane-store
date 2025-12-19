@@ -19,6 +19,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "tops",
+    requiresVariants: true, 
     image:
       "https://i.pinimg.com/1200x/64/dd/4b/64dd4b110f6e34b7da4c4074a3ee066d.jpg",
     tags: ["nuevo", "popular"],
@@ -62,6 +63,7 @@ export const mockProducts = [
     stock: 1,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/c4/94/62/c49462aeb762b8e47ab71adcd1b40538.jpg",
     tags: ["popular", "últimas unidades"],
         // 🧩 Variantes y galería nuevas
@@ -100,6 +102,7 @@ export const mockProducts = [
     stock: 9,
     category: "accesorios",
     subcategory: "aretes",
+    requiresVariants: true,
     image: "https://i.etsystatic.com/15490967/r/il/85e6ef/3116169667/il_1588xN.3116169667_59y3.jpg",
     tags: ["nuevo"],
         // 🧩 Variantes y galería nuevas
@@ -134,6 +137,7 @@ export const mockProducts = [
     stock: 5,
     category: "pijamas",
     subcategory: "enterizos",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/b8/84/dd/b884dd621e06e6328cb7de4c447ef61b.jpg",
     tags: ["invierno", "acogedor"],
     
@@ -174,6 +178,7 @@ export const mockProducts = [
     stock: 4,
     category: "pijamas",
     subcategory: "enterizos",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/b3/fc/65/b3fc65e5798d1ccb2e0a60f102a3678b.jpg",
     tags: ["invierno", "acogedor"],
     // 🧩 Variantes y galería nuevas
@@ -214,6 +219,7 @@ export const mockProducts = [
     stock: 3,
     category: "crochet",
     subcategory: "bikinis",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/0e/b2/2d/0eb22df83ba177c4e356a47ffd488abe.jpg",
     tags: ["verano", "playa"],
     // 🧩 Variantes y galería nuevas
@@ -254,6 +260,7 @@ export const mockProducts = [
     measurements: "Tallas disponibles: 36-37, 38-39, 40-41",
     stock: 0,
     category: "pijamas",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/98/70/76/98707651f390ca3681a92f848ca698c0.jpg",
     tags: ["agotado"],
     // 🧩 Variantes y galería nuevas
@@ -293,6 +300,7 @@ export const mockProducts = [
     stock: 6,
     category: "accesorios",
     subcategory: "chokers-conchas",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/30/d9/2a/30d92a104c16b4ef28391e7890e52a9b.jpg",
     tags: ["artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -327,6 +335,7 @@ export const mockProducts = [
     stock: 6,
     category: "crochet",
     subcategory: "chokers",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/89/78/f0/8978f006b43b2ea385b5b8f338599a48.jpg",
     tags: ["nuevo", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -360,6 +369,7 @@ export const mockProducts = [
     stock: 6,
     category: "crochet",
     subcategory: "pulseras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/6e/05/18/6e0518676f5201fca7e001d496a66f06.jpg",
    
     tags: ["nuevo", "artesanal"],
@@ -400,6 +410,7 @@ export const mockProducts = [
     stock: 5,
     category: "crochet",
     subcategory: "vinchas",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/eb/70/62/eb7062514ec438d2e3674a02c57ea546.jpg",
     tags: ["nuevo", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -443,6 +454,7 @@ export const mockProducts = [
     stock: 2,
     category: "crochet",
     subcategory: "aretes",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/dd/5b/af/dd5baf8db10a4aade15e59d70c7b54e0.jpg",
     tags: ["nuevo", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -512,6 +524,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/cb/99/9a/cb999a971ffe75859bc42285c7f79ae0.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -566,6 +579,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "tops",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/57/80/dd/5780dd8cae668995c5483616dcff1d5e.jpg",
     tags: ["nuevo", "popular", "artesanal"],
         // 🧩 Variantes y galería nuevas
@@ -619,6 +633,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "bikinis",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/53/26/87/5326878f5339916eaa8a4909089c9aa3.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -667,6 +682,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "conjuntos",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/23/a6/3e/23a63e532c71ecd5754300c25b6b4b0b.jpg",
     tags: ["nuevo", "popular", "crochet", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -706,6 +722,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/f0/63/41/f06341c17ed36656c101596712033ecb.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -752,6 +769,7 @@ export const mockProducts = [
     stock: 4,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/3e/ae/43/3eae43844e679d043680ea2abb5eb508.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -795,6 +813,7 @@ export const mockProducts = [
     stock: 3,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/74/69/d4/7469d4a89d56734626681433c40e5a10.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -836,6 +855,7 @@ export const mockProducts = [
     stock: 5,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/16/68/e7/1668e71c72d71195ef394e7fdab8ae63.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -886,6 +906,7 @@ export const mockProducts = [
     stock: 5,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/58/2e/45/582e4501c2ee84c96daeac1c03e13add.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -940,6 +961,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "carteras",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/2f/11/c6/2f11c67a8433366a1e3e3555eb2d4f01.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -985,6 +1007,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "tops",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/c8/37/73/c83773bec7be3608e50b4d25efd6082c.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -1031,6 +1054,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "tops",
+    requiresVariants: true,
     image: "https://i.pinimg.com/1200x/bc/c6/ab/bcc6ab6a1018e411a418a9651d0c8442.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
@@ -1076,6 +1100,7 @@ export const mockProducts = [
     stock: 7,
     category: "crochet",
     subcategory: "tops",
+    requiresVariants: true,
     image: "https://i.pinimg.com/736x/bb/ad/76/bbad76e2518c52de453a9098dd17c9b9.jpg",
     tags: ["nuevo", "popular", "artesanal"],
     // 🧩 Variantes y galería nuevas
