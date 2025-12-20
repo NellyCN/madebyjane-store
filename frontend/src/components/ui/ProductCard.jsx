@@ -36,7 +36,7 @@ import Button from './Button'
 import Badge from './Badge'
 import { useNavigate } from 'react-router-dom';
 
-export function ProductCard({ product, onAddToCart }) {
+export function ProductCard({ product }) {
   const { 
     name, 
     price, 
@@ -44,7 +44,7 @@ export function ProductCard({ product, onAddToCart }) {
     stock, 
     category,
     image,
-    tags = []  // 🆕 Agregar tags
+    tags = []
   } = product
 
   const isLowStock = stock < 5
@@ -65,8 +65,6 @@ export function ProductCard({ product, onAddToCart }) {
       return cleanTag === 'nuevo' || cleanTag === 'popular'
     })
   }
-
-  const requiresVariants = product.requiresVariants === true;
 
   return (
     <Card className="overflow-hidden cursor-pointer"> {/* 🆕 AGREGANDO cursor-pointer */}
@@ -125,7 +123,7 @@ export function ProductCard({ product, onAddToCart }) {
               {isOutOfStock ? 'Agotado' : `${stock} en stock`}
             </div>
             {isLowStock && !isOutOfStock && (
-              <Badge variant="warning" className="text-xs">
+              <Badge variant="warning" className="ml-1 text-xs">
                 Bajo stock
               </Badge>
             )}
@@ -144,17 +142,13 @@ export function ProductCard({ product, onAddToCart }) {
           onClick={(e) => {
             e.stopPropagation(); // 🆕 IMPORTANTE: Evitar que el click navegue a la página de detalle
 
-            if (requiresVariants) {
-              navigate(`/producto/${product.id}`);
-            } else {
-              onAddToCart && onAddToCart(product);
-            }
+            navigate(`/producto/${product.id}`); // Navegar al detalle del producto
           }}
           className="w-full"
         >
-          {isOutOfStock ? 'Agotado' : requiresVariants ? 'Ver Producto' : 'Agregar al Carrito'}
+          {isOutOfStock ? 'Producto Agotado' : 'Ver Producto'}  
         </Button>
-        
+
       </div>
     </Card>
   )

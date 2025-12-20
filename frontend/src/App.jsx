@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
+import MainLayout from './layout/MainLayout'
 import WaveHeader from './components/WaveHeader'
 import Store from './pages/Store'
 import Admin from './pages/Admin'
@@ -25,16 +26,18 @@ function App() {
           {/* 🆕 CONFIGURANDO RUTAS */}
           <main className="flex-grow p-4">
             <Routes>
-              <Route path="/" element={<Store />} />
-              <Route path="/store" element={<Store />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/demo" element={<ComponentDemo />} />
-              <Route path="/producto/:id" element={<ProductDetail />} />
-              {/* Ruta 404 - debe ir al final */}
-              <Route path="*" element={<NotFound />} />
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Store />} />
+                <Route path="/store" element={<Store />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/demo" element={<ComponentDemo />} />
+                <Route path="/producto/:id" element={<ProductDetail />} />
+                {/* Ruta 404 - debe ir al final */}
+                <Route path="*" element={<NotFound />} />
+              </Route>
             </Routes>
           </main>
 
