@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import MainLayout from './layout/MainLayout'
-import WaveHeader from './components/WaveHeader'
+
 import Store from './pages/Store'
 import Admin from './pages/Admin'
 import Inventory from './pages/Inventory'
@@ -10,21 +10,15 @@ import Cart from './pages/Cart'
 import ComponentDemo from './pages/ComponentDemo'
 import NotFound from './pages/NotFound'
 import ProductDetail from './pages/ProductDetail'
-import Footer from './components/footer/Footer'
 
 function App() {
   return (
-    
     /* 🆕 ENVOLVER TODO CON CART PROVIDER */
     <CartProvider>
       <Router>
-        <div className="App flex flex-col min-h-screen">
-          
-          {/* Header */}
-          <WaveHeader />
-          
+                
           {/* 🆕 CONFIGURANDO RUTAS */}
-          <main className="flex-grow p-4">
+          
             <Routes>
               <Route element={<MainLayout />}>
                 <Route path="/" element={<Store />} />
@@ -39,11 +33,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
-          </main>
 
-          {/* ⭐ Footer se muestra en TODO el sitio ⭐ */}
-          <Footer />    
-        </div>
       </Router>
     </CartProvider>
   );
