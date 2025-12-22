@@ -23,19 +23,20 @@ function cartReducer(state, action) {
       const existingItem = state.items.find(item => item.id === action.payload.id)
       
       // Si ya está en el carrito → aumentar cantidad
+      let updatedItems
+
       if (existingItem) {
-        const updatedItems = state.items.map(item =>
+        updatedItems = state.items.map(item =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
+      } else {
+        updatedItems = [...state.items, { ...action.payload, quantity: 1 }]
+      }
+
         return calculateTotals(updatedItems)
       } 
-        
-      // Si es nuevo, agregar al carrito
-      const newItems = [...state.items, { ...action.payload, quantity: 1 }];
-      return calculateTotals(newItems)
-    }
 
     case CART_ACTIONS.REMOVE_ITEM:{
       const filteredItems = state.items.filter(item => item.id !== action.payload)
@@ -43,12 +44,12 @@ function cartReducer(state, action) {
     }
 
     case CART_ACTIONS.UPDATE_QUANTITY:{
-      const itemsWithUpdatedQuantity = state.items.map(item =>
+      const updatedItems = state.items.map(item =>
         item.id === action.payload.id
           ? { ...item, quantity: Math.max(1, action.payload.quantity) }
           : item
-      );
-      return calculateTotals(itemsWithUpdatedQuantity)
+      )
+      return calculateTotals(updatedItems)
     }
 
     case CART_ACTIONS.CLEAR_CART:{
@@ -73,15 +74,21 @@ export function CartProvider({ children }) {
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
+  //const [items, setItems] = useState([])
+  const [isMiniCartOpen, setIsMiniCartOpen] = useState(false)
+
+
   // 🛒 Cargar desde localStorage SOLO al inicio
   useEffect(() => {
     const savedCart = localStorage.getItem('madebyjane-cart');
     if (savedCart) {
       try {
-        const parsedCart = JSON.parse(savedCart);
-        dispatch({ type: CART_ACTIONS.LOAD_CART, payload: parsedCart });
-      } catch (error) {
-        console.error('❌ Error loading cart:', error);
+        dispatch({
+          type: CART_ACTIONS.LOAD_CART,
+          payload: JSON.parse(savedCart)
+        })
+      } catch (e) {
+        console.error('❌ Error loading cart:', e);
       }
     }
     
@@ -89,6 +96,7 @@ export function CartProvider({ children }) {
     setHasLoaded(true); 
   }, []);   // 🆕 Array de dependencias VACÍO - solo se ejecuta una vez
 
+  
   // 🛒 Guardar carrito en localStorage cuando cambie - SOLO si ya cargó
   useEffect(() => {
     // No guardar durante la carga inicial (evitar ciclo infinito)
@@ -104,29 +112,35 @@ export function CartProvider({ children }) {
   }, [state, hasLoaded]);  // 🆕 Agregar hasLoaded como dependencia
 
   // 🛒 Acciones del carrito públicas
-  const addToCart = (product) =>
+  const addToCart = (product) => {
     dispatch({ type: CART_ACTIONS.ADD_ITEM, payload: product })
+    setIsMiniCartOpen(true) // 🔥 auto-open minicart
+  }
 
   const removeFromCart = (productId) =>
     dispatch({ type: CART_ACTIONS.REMOVE_ITEM, payload: productId })
 
   const updateQuantity = (productId, quantity) => 
-    dispatch({ type: CART_ACTIONS.UPDATE_QUANTITY, payload: { id: productId, quantity } });
+    dispatch({ 
+      type: CART_ACTIONS.UPDATE_QUANTITY, payload: { id: productId, quantity } 
+    });
   
   const clearCart = () => 
     dispatch({ type: CART_ACTIONS.CLEAR_CART });
-  
-  // 🟨 Valores expuestos
-  const value = {
-    ...state,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart
-  };
 
   return (
-    <CartContext.Provider value={value}>
+    <CartContext.Provider 
+      value={{
+        ...state,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        isMiniCartOpen,
+        setIsMiniCartOpen
+      }}
+    >
+
       {children}
     </CartContext.Provider>
   );
