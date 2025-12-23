@@ -40,7 +40,7 @@ function ProductDetail() {
 
     // -------- 🟩 ESTADOS DE INTERFAZ (UI) --------
     const [activeTab, setActiveTab] = useState("description");  // Tabs dinámicos (Desc/Espec/Cuidados)
-    const [showToast, setShowToast] = useState(false);          // Notificación de carrito
+
     const [buttonText, setButtonText] = useState("");           // Texto del botón agregar al carrito
     const [showSizeTable, setShowSizeTable] = useState(false);  // Mostrar/ocultar tabla de tallas
 
@@ -125,15 +125,13 @@ function ProductDetail() {
         // Agregar varias unidades
         for (let i = 0; i < quantity; i++) addToCart(productWithVariants);
         
-        setButtonText("¡Agregado! 🎉");
-        setShowToast(true);
-        
+        setButtonText("Agregado ✓");
+
         setTimeout(() => {
             setButtonText(
                 `Agregar ${quantity} al Carrito - S/. ${(product.price * quantity).toFixed(2)}`
             );
-            setShowToast(false);
-        }, 1400);
+        }, 600); 
     };
 
     // 🆕 Funciones del SLIDER (para cambiar imagen en galería)
@@ -456,13 +454,16 @@ function ProductDetail() {
 
                             {/* 🛒 Botón agregar al carrito */}
                             <Button
-                                variant={
-                                    buttonText.includes("¡Agregado!") ? "secondary" : "primary"
-                                }
+                                variant="primary"
                                 onClick={handleAddToCart}
                                 disabled={product.stock === 0}
-                                className="w-full py-3 text-lg">
-                                    {buttonText}
+                                className={`w-full py-3 text-lg transition-all duration-300
+                                    ${buttonText === "Agregado ✓"
+                                    ? "bg-green-600 hover:bg-green-700"
+                                    : ""}
+                                `}
+                            >
+                                {buttonText}
                             </Button>
 
                             {/* 🚫 Mensaje de error de variantes */}
@@ -494,21 +495,6 @@ function ProductDetail() {
                 {/* 🆕 Sección de Productos Relacionados */}
                 <RelatedProducts product={product} navigate={navigate} />
 
-                {/* ✅ TOAST NOTIFICATION - Fuera del container principal */}
-                {showToast && (
-                    <div className="fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slideIn">
-                        <span>✅ ¡{quantity} {product.name} agregado(s) al carrito!</span>
-                    </div>
-                )}
-
-                {/* ✨ Animación del toast */}
-                <style>{`
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                    .animate-slideIn { animation: slideIn 0.25s ease-out; }
-                `}</style>
             </div>
         </div>
     );
