@@ -19,33 +19,38 @@ function calculateTotals(items) {
 // 🛒 Reducer para manejar el estado del carrito
 function cartReducer(state, action) {
   switch (action.type) {
+    
     case CART_ACTIONS.ADD_ITEM:{
-      const existingItem = state.items.find(item => item.id === action.payload.id)
+      const incomingItem = action.payload;
+
+      // KEY POINT: Usar cartItemId para distinguir variantes (producto + variantes)
+      const existingItem = state.items.find(item => item.cartItemId === incomingItem.cartItemId);
       
       // Si ya está en el carrito → aumentar cantidad
       let updatedItems
 
       if (existingItem) {
         updatedItems = state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
+          item.cartItemId === incomingItem.cartItemId
+            ? { ...item, quantity: item.quantity + incomingItem.quantity }
             : item
         )
       } else {
-        updatedItems = [...state.items, { ...action.payload, quantity: 1 }]
+        // Si no está → agregar nuevo ítem
+        updatedItems = [...state.items, incomingItem]
       }
 
         return calculateTotals(updatedItems)
       } 
 
     case CART_ACTIONS.REMOVE_ITEM:{
-      const filteredItems = state.items.filter(item => item.id !== action.payload)
+      const filteredItems = state.items.filter(item => item.cartItemId !== action.payload)
       return calculateTotals(filteredItems)
     }
 
     case CART_ACTIONS.UPDATE_QUANTITY:{
       const updatedItems = state.items.map(item =>
-        item.id === action.payload.id
+        item.cartItemId === action.payload.cartItemId
           ? { ...item, quantity: Math.max(1, action.payload.quantity) }
           : item
       )
@@ -82,21 +87,15 @@ export function CartProvider({ children }) {
   useEffect(() => {
     const savedCart = localStorage.getItem('madebyjane-cart');
     if (savedCart) {
-      try {
-        dispatch({
-          type: CART_ACTIONS.LOAD_CART,
-          payload: JSON.parse(savedCart)
-        })
-      } catch (e) {
-        console.error('❌ Error loading cart:', e);
-      }
-    }
-    
+      dispatch({
+        type: CART_ACTIONS.LOAD_CART,
+        payload: JSON.parse(savedCart)
+      })
+    }    
     // Marcar que ya cargamos
     setHasLoaded(true); 
   }, []);   // 🆕 Array de dependencias VACÍO - solo se ejecuta una vez
 
-  
   // 🛒 Guardar carrito en localStorage cuando cambie - SOLO si ya cargó
   useEffect(() => {
     // No guardar durante la carga inicial (evitar ciclo infinito)
@@ -108,21 +107,23 @@ export function CartProvider({ children }) {
     } else {
       localStorage.setItem('madebyjane-cart', JSON.stringify(state));
     }
-
   }, [state, hasLoaded]);  // 🆕 Agregar hasLoaded como dependencia
 
-  // 🛒 Acciones del carrito públicas
-  const addToCart = (product) => {
-    dispatch({ type: CART_ACTIONS.ADD_ITEM, payload: product })
+    // ==============================
+    // 🛒 Acciones del carrito públicas
+    // ==============================
+    const addToCart = (cartItem) => {
+    dispatch({ type: CART_ACTIONS.ADD_ITEM, payload: cartItem })
     setIsMiniCartOpen(true) // 🔥 auto-open minicart
   }
 
-  const removeFromCart = (productId) =>
-    dispatch({ type: CART_ACTIONS.REMOVE_ITEM, payload: productId })
+  const removeFromCart = (cartItemId) =>
+    dispatch({ type: CART_ACTIONS.REMOVE_ITEM, payload: cartItemId })
 
-  const updateQuantity = (productId, quantity) => 
+  const updateQuantity = (cartItemId, quantity) => 
     dispatch({ 
-      type: CART_ACTIONS.UPDATE_QUANTITY, payload: { id: productId, quantity } 
+      type: CART_ACTIONS.UPDATE_QUANTITY,
+      payload: { cartItemId, quantity }
     });
   
   const clearCart = () => 
@@ -140,7 +141,6 @@ export function CartProvider({ children }) {
         setIsMiniCartOpen
       }}
     >
-
       {children}
     </CartContext.Provider>
   );

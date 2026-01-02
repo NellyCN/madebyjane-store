@@ -34,37 +34,11 @@ function Store() {
   // 🆕 DEBOUNCING para búsqueda - mejora performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-
-
-  /**
-   * Función para manejar agregar al carrito
-   */
-  // const handleAddToCart = (product) => {
-
-  //   addToCart(product)
-
-  //   // 🆕 Feedback visual temporal
-  //   const button = document.querySelector(`[data-product-id="${product.id}"]`)
-    
-  //   if (button) {
-  //     button.textContent = '¡Agregado!'
-  //     button.classList.add('bg-green-500')
-      
-  //     setTimeout(() => {
-  //       button.textContent = 'Agregar al Carrito'
-  //       button.classList.remove('bg-green-500')
-  //     }, 1500)
-    
-  //   }
-  // }
-
   // 🆕 FUNCIÓN DE ORDENAMIENTO
   // 🧠 MEMOIZACIÓN para evitar cálculos innecesarios
   const filteredAndSortedProducts = useMemo(() => {
     // 🔍 Determinar categoría activa:
     // Si llegamos desde un enlace con ?category= en la URL,
-    // usamos ese valor, de lo contrario, el estado seleccionado por botones.
-    // const activeCategory = categoryFilter || selectedCategory;
     // 🔧 Prioriza la selección del usuario (selectedCategory) y no el query param
     const activeCategory = selectedCategory !== 'all'
       ? selectedCategory

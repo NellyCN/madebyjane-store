@@ -14,12 +14,12 @@ function MiniCart() {
     const navigate = useNavigate()
 
     // 🆕 CÁLCULOS
-    const subtotal = total;
+    // const subtotal = total;
     
     // const igv = subtotal * 0.18; // 18% IGV
-    const shippingCost = subtotal > 100 ? 0 : 15;
-    const finalTotal = subtotal + shippingCost;
-    const remainingForFreeShipping = 100 - subtotal;
+    const shippingCost = total > 100 ? 0 : 15;
+    const finalTotal = total + shippingCost;
+    const remainingForFreeShipping = 100 - total;
 
     return (
         <>
@@ -54,7 +54,7 @@ function MiniCart() {
                 </div>
 
                 {/* 🆕 LÍNEA DE ENVÍO GRATIS DEBAJO DEL TÍTULO */}
-                {subtotal > 0 && (
+                {total > 0 && (
                     <div className="p-2 text-center text-xs">
                         {shippingCost === 0 ? (
                             <span className="text-green-600 font-semibold bg-green-100 p-1 rounded full block">
@@ -70,31 +70,35 @@ function MiniCart() {
 
                 {/* Lista de productos */}
                 <div className="p-4 overflow-y-auto flex-1">
-                    {items.length === 0 ? (
-                        <p className="text-center text-gray-500">Tu Carrito está Vacío</p>
-                    ) : (
-                        items.map(item => (
-                            <div key={item.id} className="flex gap-3 py-3 border-b">
-                                <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    className="w-12 h-12 object-cover rounded"
-                                />
-                                <div className="flex-1">
-                                    <p className="text-sm font-medium truncate">{item.name}</p>
-                                    <p className="text-xs text-gray-600">
-                                        S/. {item.price} × {item.quantity}
-                                    </p>
-                                </div>
-                                <button
-                                    onClick={() => removeFromCart(item.id)}
-                                    className="text-red-500 text-xs"
-                                >
-                                    Eliminar
-                                </button>
+                    {items.map(item => (
+                        <div key={item.cartItemId} className="flex gap-3 py-3 border-b">
+                            <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-12 h-12 object-cover rounded"
+                            />
+                            <div className="flex-1">
+                                <p className="text-sm font-medium truncate">{item.name}</p>
+                            
+                                {/* 🆕 VARIANTS */}
+                                <p className="text-xs text-gray-500">
+                                    {item.selectedSize && `Size: ${item.selectedSize}`}{" "}
+                                    {item.selectedColor && `| Color: ${item.selectedColor}`}
+                                </p>
+
+                                <p className="text-xs text-gray-600">
+                                    S/. {item.price} × {item.quantity}
+                                </p>
                             </div>
-                        ))
-                    )}
+
+                            <button
+                                onClick={() => removeFromCart(item.cartItemId)}
+                                className="text-red-500 text-xs"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    ))}
                 </div>
                     
                 {/* 🆕 RESUMEN */}
@@ -107,7 +111,7 @@ function MiniCart() {
                     <Button
                         variant="primary"
                         className="w-full"
-                        disabled={items.length === 0}
+                        // disabled={items.length === 0}
                         onClick={() => {
                             setIsMiniCartOpen(false)
                             navigate('/cart')

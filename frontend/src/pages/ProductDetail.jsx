@@ -51,12 +51,17 @@ function ProductDetail() {
     // Actualiza imagen inicial y resetea variantes al cambiar de producto
     useEffect(() => {
         if (!product) return;
-        // usa la primera imagen de gallery si existe, si no fallback a product.image
-         const firstImage =
-            product.gallery?.length > 0 ? product.gallery[0] : product.image || "";
+        
+        // Imagen inicial: primera de la galería o imagen principal
+        const firstImage =
+            product.gallery?.length > 0 
+                ? product.gallery[0] 
+                : product.image || "";
         
         setActiveImage(firstImage);
         setImageIndex(0);
+
+        // Resetear variantes y errores
         setSelectedColor(null);
         setSelectedSize(null);
         setVariantError("");
@@ -104,27 +109,39 @@ function ProductDetail() {
     // Validaciones + 🛒 Agregar al carrito
     const handleAddToCart = () => {
         // 🛑 Validación de variantes
-        if (product.variants?.sizes?.length > 0 && !selectedSize) {
+        if (product.variants?.sizes?.length && !selectedSize) {
             setVariantError("Selecciona una talla.");
             return;
         }
-        if (product.variants?.colors?.length > 0 && !selectedColor) {
+
+        if (product.variants?.colors?.length && !selectedColor) {
             setVariantError("Selecciona un color.");
             return;
         }
 
         setVariantError("");
 
-        // 🆕 Crear un producto con variantes seleccionadas
-        const productWithVariants = {
-            ...product,
+        // 🆕 Buscar la imagen según el color seleccionado
+        const selectedColorData = product.variants?.colors?.find(
+            c => c.name === selectedColor
+        );
+
+        // 🆕 Create a UNIQUE cart item per variant
+        const cartItem = {
+            cartItemId: `${product.id}-${selectedSize || 'no-size'}-${selectedColor || 'no-color'}`,
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            //🔥 IMAGEN elegida en Pedido(CART) según variante de color
+            image: selectedColorData.image || product.image,
+
             selectedSize,
             selectedColor,
+            quantity
         };
 
-        // Agregar varias unidades
-        for (let i = 0; i < quantity; i++) addToCart(productWithVariants);
-        
+        addToCart(cartItem)
+
         setButtonText("Agregado ✓");
 
         setTimeout(() => {
