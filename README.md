@@ -170,8 +170,8 @@ Este proyecto es parte de mi portafolio profesional y un caso de estudio activo.
 
 ¿Interesado en colaborar, dar feedback o conversar sobre desarrollo full-stack?
 
-![Github](https://img.shields.io/badge/GitHub-NellyCN-181717?style=flat&logo=github)
-![LinkedIn](https://img.shields.io/badge/LinkedIn-nellycn-0077B5?style=flat&logo=linkedin)
+![Github](https://github.com/NellyCN/)
+![LinkedIn](https://www.linkedin.com/in/nellycumpa/)
 
 ---
 
