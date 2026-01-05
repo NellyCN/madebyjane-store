@@ -1,100 +1,184 @@
-# 🏗️ MadeByJane Store - Under Construction
+# 🏗️ MadeByJane E-commerce ( Under Construction )
 
 <div align="center">
 
 ![MadeByJane](https://img.shields.io/badge/Status-🚧_Active_Development-orange)
 
-![React](https://img.shields.io/badge/Frontend-React_Vite-61DAFB?logo=react)
-![Spring Boot](https://img.shields.io/badge/Backend-Spring_Boot-6DB33F?logo=springboot)
-![Tailwind](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwindcss)
 
-**"A beautiful e-commerce platform for handmade crochet and natural accessories"**
+![React](https://img.shields.io/badge/Frontend-React_Vite-61DAFB?logo=react)
+![Tailwind](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwindcss)
+[![Vercel](https://img.shields.io/badge/Deployment-Vercel-black?style=flat&logo=vercel)](https://vercel.com)
+![MadeByJane](https://img.shields.io/badge/🚧_MVP_Frontend_Deployed-success?logo=vercel&color=22c55e)
+
+[![Node.js](https://img.shields.io/badge/Backend-Node.js-339933?style=flat&logo=nodedotjs)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Backend-Express-000000?style=flat&logo=express)](https://expressjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat&logo=postgresql)](https://www.postgresql.org/)
+
+*"A beautiful e-commerce platform for handmade crochet and natural accessories"*
+
+> **Un caso de estudio en desarrollo ágil: de la idea al MVP en producción.**
+
+### **🔗 Demo:** [MadeByJane](https://madebyjane.vercel.app/)
+*Catálogo interactivo • Carrito funcional • 100% Responsive*
+
+### **📋 Tablero:** [GitHub Projects](https://github.com/users/NellyCN/projects/4)
 
 </div>
 
-## 📋 Project Status
+## 🎯 Descripción del Proyecto
 
-### 🚧 Current Phase: Foundation Development
-We're actively building the core foundation of the application. Expect frequent updates and improvements!
+"MadeByJane" es un e-commerce desarrollado desde cero para un emprendimiento de tejidos artesanales. El proyecto nació de la necesidad de crear una **plataforma de e-commerce hermosa y funcional para la venta de productos artesanales de crochet y accesorios naturales, con una experiencia de usuario fluida y moderna**, combinando **mentalidad de producto** (detección de necesidades reales) con **ejecución técnica moderna y desarrollo FullStack**.
 
-### ✅ What's Working Now:
-- ✅ Project structure and architecture
-- ✅ GitHub repository setup
-- ✅ Responsive navigation with mobile menu
-- ✅ React Router configuration
-- ✅ Basic page components
+---
 
-### 🔄 Coming Very Soon:
-- 🛒 Product catalog and shopping cart
-- ⚙️ Admin panel for inventory management
-- 📝 Blog system integration
-- 💳 Checkout and payment integration
+## 🚀 Estado Actual: MVP Frontend en Producción
 
-## 🛠️ Tech Stack
+### ✅ **Funcionalidades Implementadas**
+- **Frontend completo** desplegado en Vercel (React 18 + Vite + Tailwind CSS)
+- **Catálogo de productos** con filtros por categoría y búsqueda
+- **Vista detalle de producto** con tablas de tallas personalizadas
+- **Carrito de compras** con lógica compleja:
+  - Cálculo automático de impuestos (IGV 18%)
+  - Envío condicional (gratuito sobre X monto)
+  - Resumen en tiempo real
+- **Flujo de checkout modular** listo para integración backend
+- **Diseño 100% responsive** (mobile-first)
+- **Gestión ágil** con Kanban en GitHub Projects
 
-### Frontend
-- **React 18** with Vite
-- **Tailwind CSS** for styling
-- **React Router DOM** for navigation
-- **Lucide React** for icons
+### 🚧 **En Desarrollo/Próximamente**
+- **Backend** con Node.js/Express (en desarrollo)
+- **Base de datos** PostgreSQL (esquema diseñado)
+- **Panel de administración** (planeado)
+- **Integración de pagos** Stripe/MercadoPago (pendiente)
 
-### Backend
-- **Java Spring Boot**
-- **Spring Data JPA**
-- **MySQL/PostgreSQL** database
+---
 
-## 🚀 Getting Started
+## 🛠️ Stack Tecnológico
 
-### Prerequisites
-- Node.js 18+ 
-- Java 17+
-- MySQL/PostgreSQL
+### Frontend (En producción)
+- **React 18** con Vite (configuración optimizada)
+- **Tailwind CSS** para estilos utilitarios y responsive design
+- **React Router DOM** para navegación SPA
+- **Context API + Hooks** para gestión de estado (carrito, productos)
+- **Vercel** para despliegue y hosting
 
-### Development Setup
+### Backend (En desarrollo)
+- **Node.js + Express** para API REST
+- **PostgreSQL/MySQL** para base de datos
+- **JWT** para autenticación
+- **Prisma ORM** para gestión de base de datos
+
+---
+
+## 📊 Gestión del Proyecto
+
+Este proyecto es un **ejemplo de desarrollo ágil aplicado**:
+- **Tablero Kanban** con [GitHub Projects](https://github.com/users/NellyCN/projects/4) (backlog, sprints, milestones)
+- **Priorización basada en impacto de negocio** (ej: tablas de tallas antes que features decorativas)
+- **Ciclos de feedback continuo** y mejora iterativa
+- **Control de versiones** con Git y convenciones de commits
+
+---
+
+## 🎨 Características Destacadas
+
+### 1. **Experiencia de Usuario Centrada en Conversión**
+- Tablas de tallas específicas por tipo de producto para reducir devoluciones.
+- Transparencia de precios: el IGV se calcula y muestra explícitamente.
+- Lógica de envíos clara (gratis sobre X monto).
+
+### 2. **Arquitectura Escalable**
+- Componentes React modulares y reutilizables.
+- Estructura de carpetas clara (`/components`, `/context`, `/pages`, etc.)
+- Preparado para integración con backend (servicios separados).
+
+### 3. **Calidad de Código**
+- ESLint configurado para buenas prácticas.
+- Código comentado en secciones críticas.
+- **Diseño responsive probado en múltiples dispositivos:**
+
+---
+
+## 🏃‍♀️ Cómo Ejecutar Localmente
+
 ```bash
-# Frontend
-cd frontend
+# 1. Clonar el repositorio
+git clone https://github.com/NellyCN/madebyjane-store.git
+cd madebyjane-store/frontend
+
+# 2. Instalar dependencias del frontend
 npm install
+
+# 3. Ejecutar entorno de desarrollo
 npm run dev
 
-# Backend (coming soon)
-cd backend
-./mvnw spring-boot:run
+# 4. Abrir en el navegador
+ http://localhost:5173
+
 ```
-## 📱 Current Features Preview
-### Navigation
-- Responsive design that works on all devices
+> Nota: El backend y la base de datos están en desarrollo. Actualmente solo el frontend está ejecutable.
 
-- Mobile hamburger menu for small screens
+---
+## 📂 Estructura del Proyecto
 
-- Active page highlighting
+```
+madebyjane-store/
+├── frontend/ # Aplicación React + Tailwind CSS (en producción)
+│    ├── public/ # Assets estáticos
+│    ├── src/
+│    │    ├── components/ # Componentes reutilizables
+│    │    ├── constants/ # Constantes de la app (routes, config)
+│    │    ├── context/ # Estado global (CartContext)
+│    │    ├── data/ # Datos mock (productos, categorías)
+│    │    ├── hooks/ # Custom hooks
+│    │    ├── layout/ # Componentes de layout (Header, Footer)
+│    │    ├── pages/ # Vistas principales (Store, ProductDetail, Cart)
+│    │    ├── services/ # Futuros servicios para API
+│    │    └── ...
+│    └──  README-frontend.md # 📖 Guía específica del frontend
+│  
+├── backend/ # Próxima implementación 
+│    ├── src/
+│    ├── pom.xml
+│    ├── README.md # 📖 Guía específica del backend
+│    └── package.json
+├── database/ # Esquemas y migraciones PostgreSQL
+│    └── schema.sql 
+└── README.md 
 
-- Smooth transitions and animations
+```
 
-## Pages Structure
-- 🛍️ Store - Product catalog
+---
 
-- 📝 Blog - Articles and inspiration
+## 👩‍💻 Autora & Motivación
 
-- ⚙️ Admin - Inventory management
+**Nelly Cumpa**  
+*Full-Stack Developer & Technical Project Lead*
 
-- 📊 Inventory - Stock control
+Este proyecto representa mi transición profesional: **15+ años en operaciones financieras** (créditos, cobranzas, optimización de procesos) + **desarrollo full-stack moderno**.
 
-- 🛒 Cart - Shopping cart
+La construcción de "MadeByJane" demuestra mi capacidad para:
+- **Liderar un producto digital** desde la concepción hasta el despliegue.
+- **Tomar decisiones técnicas basadas en necesidades de negocio**.
+- **Aplicar metodologías ágiles** en un proyecto real.
+- **Aprender y adaptar** nuevas tecnologías para resolver problemas concretos.
 
-## 🤝 Contributing
-This is currently a personal project in active development. The codebase is evolving rapidly as we build out the core features.
+---
 
-## 📄 License
-This project is being developed by Nelly Cumpa and is being developed for MadeByJane business.
+## 📬 Contacto y Colaboración
+Este proyecto es parte de mi portafolio profesional y un caso de estudio activo.
+
+¿Interesado en colaborar, dar feedback o conversar sobre desarrollo full-stack?
+
+![Github](https://img.shields.io/badge/GitHub-NellyCN-181717?style=flat&logo=github)
+![LinkedIn](https://img.shields.io/badge/LinkedIn-nellycn-0077B5?style=flat&logo=linkedin)
+
+---
 
 <div align="center">
 
->>> Follow our development journey!
-More updates coming soon...
+✨ Sigue el viaje de desarrollo
+
+Próximamente: Backend, base de datos y pasarela de pago ✨
 
 </div>
-
-
-
-
