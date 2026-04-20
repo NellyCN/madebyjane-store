@@ -47,3 +47,5 @@ backend/.settings/
 dist/
 build/
 *.exe
+
+CHANGELOG.md

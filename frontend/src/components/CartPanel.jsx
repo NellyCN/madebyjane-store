@@ -77,37 +77,72 @@ function CartPanel() {
   ====================== */
   const [showConfirm, setShowConfirm] = useState(false);
 
+  
+  const [formErrors, setFormErrors] = useState({});
+
   /* ======================
       CONFIRMACIÓN FINAL
   ====================== */
   const handleCheckoutConfirm = () => {
+
+    const errors = {};
+    
+    // Validaciones básicas
+
+    // 1️⃣ Carrito vacío
     if (items.length === 0) {
       alert("Tu carrito está vacío");
       return;
     }
 
-        // Validaciones UX
-    if (!checkoutFormData.name || !checkoutFormData.phone) {
-      alert("Completa tus datos de contacto");
-      setOpenSection("contact");
-      return;
+    // 2️⃣ Datos obligatorios
+    if (!checkoutFormData.name.trim()) {
+      errors.name = "Ingresa tu nombre";
     }
 
+    // 3️⃣ Teléfono correcto
+    if (!checkoutFormData.phone || checkoutFormData.phone.length !== 9) {
+      errors.phone = "El teléfono debe tener 9 dígitos";
+    }
+
+    // 4️⃣ Email válido
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(checkoutFormData.email)) {
+      errors.email = "Correo electrónico no válido";
+    }
+
+    // 5️⃣ Dirección si es delivery
     if (
       checkoutFormData.deliveryType === "delivery" &&
-      !checkoutFormData.address
+      !checkoutFormData.address.trim()
     ) {
-      alert("Ingresa la dirección de entrega");
-      setOpenSection("delivery");
-      return;
+      errors.address = "Ingresa la dirección de entrega";
     }
 
+    // 6️⃣ Método de pago
     if (!checkoutFormData.paymentMethod) {
-      alert("Selecciona un método de pago");
-      setOpenSection("payment");
+      errors.paymentMethod = "Selecciona un método de pago";
+    }
+
+    // 🚫 Si hay errores → UX controlado
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+
+      if (errors.name || errors.phone || errors.email) {
+        setOpenSection("contact");
+      } else if (errors.address) {
+        setOpenSection("delivery");
+      } else {
+        setOpenSection("payment");
+      }
+
       return;
     }
 
+    // 🧹 Limpia errores si todo OK
+    setFormErrors({});
+
+    // ✅ TODO OK → WhatsApp
     const orderCode = generateOrderCode();
 
     const checkoutData = {
@@ -282,30 +317,71 @@ function CartPanel() {
             onOpen={() => setOpenSection("contact")}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* <div> */}
+              {/* Nombre */}
               <input
                 type="text"
                 placeholder="Nombre"
-                className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 value={checkoutFormData.name}
-                onChange={e => updateCheckoutField("name", e.target.value)} 
+                onChange={e => updateCheckoutField("name", e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, ""))
+                }
+                className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2
+                  ${formErrors.name ? "border-red-500 focus:ring-red-500" : "focus:ring-cyan-500"}
+                `}
               />
-              <input
-                type="text"
-                placeholder="Apellidos"
-                className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                value={checkoutFormData.lastName}
-                onChange={e => updateCheckoutField("lastName", e.target.value)}
-              />
+              {formErrors.name && (
+                <p className="text-xs text-red-500 mt-1">{formErrors.name}</p>
+              )}
             </div>
-
-            <input 
-              type="tel"
-              placeholder="Teléfono" 
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              value={checkoutFormData.phone}
-              onChange={e => updateCheckoutField("phone", e.target.value)}
-            />
               
+              {/* Apellido */}
+              <div>
+                <input
+                  type="text"
+                  placeholder="Apellidos"
+                  value={checkoutFormData.lastName}
+                  onChange={e => updateCheckoutField("lastName", e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, ""))
+                  }
+                  className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2
+                    ${formErrors.lastName ? "border-red-500 focus:ring-red-500" : "focus:ring-cyan-500"}
+                  `}
+                />
+              </div>
+
+            {/* Teléfono */}
+            <div>          
+              <input 
+                type="tel"
+                inputMode="numeric"
+                placeholder="Teléfono"
+                maxLength={9}
+                pattern="[0-9]*"
+                value={checkoutFormData.phone}
+                onChange={e => updateCheckoutField("phone", e.target.value.replace(/\D/g,""))}
+                className={`border rounded px-3 py-2 focus:outline-none focus:ring-2
+                  ${formErrors.phone ? "border-red-500 focus:ring-red-500" : "focus:ring-cyan-500"}
+                `}
+              />
+              {formErrors.phone && (
+                <p className="text-xs text-red-500 mt-1">{formErrors.phone}</p>
+              )}
+            </div>
+            {/* Email */}
+            <div> 
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                value={checkoutFormData.email}
+                onChange={e => updateCheckoutField("email", e.target.value)}
+                className={`border rounded px-3 py-2 focus:outline-none focus:ring-2
+                  ${formErrors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-cyan-500"}
+                `}
+              />
+              {formErrors.email && (
+                <p className="text-xs text-red-500 mt-1">{formErrors.email}</p>
+              )}
+            </div>
+            
             <Button 
               className="w-full mt-2"
               onClick={() => setOpenSection("delivery")}
@@ -480,26 +556,7 @@ function CartPanel() {
                 Podrás coordinar el pago y la entrega en el siguiente paso
               </p>
 
-              {/* <div className="text-sm space-y-2 max-h-40 overflow-auto">
-                {items.map(item => (
-                  <p key={item.id}>
-                    <strong>- </strong>{item.name}
-                      (<strong>Talla: </strong>{item.selectedSize}, <strong>Color: </strong>{item.selectedColor}) x {item.quantity}
-                  </p>
-                ))}
-                <p><strong>Total:</strong> S/. {finalTotal.toFixed(2)}</p>
-                <p><strong>Pago:</strong> {checkoutFormData.paymentMethod}</p>
-                <p><strong>Entrega:</strong> {
-                  checkoutFormData.deliveryType === "delivery"
-                    ? "Envío a domicilio"
-                    : "Recojo previa coordinación"
-                }</p>
-                <p className="text-xs text-gray-500 text-center">
-                  Podrás coordinar el pago y entrega en el siguiente paso
-                </p>
-              </div> */}
-
-
+              {/* BOTONES */}
               <div className="flex gap-3">
                 <Button
                   variant="outline"

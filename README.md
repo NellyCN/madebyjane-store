@@ -1,4 +1,4 @@
-# 🏗️ MadeByJane E-commerce ( Under Construction )
+# 🏗️ MadeByJane - E-commerce Fullstack (Frontend MVP en producción)
 
 <div align="center">
 
@@ -15,58 +15,57 @@
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat&logo=postgresql)](https://www.postgresql.org/)
 
 *"A beautiful e-commerce platform for handmade crochet and natural accessories"*
+</div>
 
-> **Un caso de estudio en desarrollo ágil: de la idea al MVP en producción.**
+## **🎯 Descripción del Proyecto**
 
-### **🔗 Demo:** [MadeByJane](https://madebyjane.vercel.app/)
+Aplicación e-commerce desarrollada con React para la venta de productos artesanales, enfocada en experiencia de usuario, lógica de negocio real y escalabilidad.
+
+<div align="center">
+
+### 🔗 Demo en Producción: [MadeByJane](https://madebyjane.vercel.app/)
+
 *Catálogo interactivo • Carrito funcional • 100% Responsive*
-
-### **📋 Tablero:** [GitHub Projects](https://github.com/users/NellyCN/projects/4)
+### 📋 Tablero: [GitHub Projects](https://github.com/users/NellyCN/projects/4)
 
 </div>
 
-## 🎯 Descripción del Proyecto
+## 📸 **Vista previa**
 
-"MadeByJane" es un e-commerce desarrollado desde cero para un emprendimiento de tejidos artesanales. El proyecto nació de la necesidad de crear una **plataforma de e-commerce hermosa y funcional para la venta de productos artesanales de crochet y accesorios naturales, con una experiencia de usuario fluida y moderna**, combinando **mentalidad de producto** (detección de necesidades reales) con **ejecución técnica moderna y desarrollo FullStack**.
+### 🏠 Home
+![Home](assets/home.png)
 
----
+### 🛒 Carrito
+![Carrito](assets/cart.png)
 
-## 🚀 Estado Actual: MVP Frontend en Producción
+### 💳 Checkout
+![Checkout](assets/checkout.png)
 
-### ✅ **Funcionalidades Implementadas**
-- **Frontend completo** desplegado en Vercel (React 18 + Vite + Tailwind CSS)
-- **Catálogo de productos** con filtros por categoría y búsqueda
+## ✅ **Funcionalidades**
+- **Catálogo de productos** con filtros y búsqueda
 - **Vista detalle de producto** con tablas de tallas personalizadas
-- **Carrito de compras** con lógica compleja:
-  - Cálculo automático de impuestos (IGV 18%)
+- **Carrito de compras** con lógica de negocio:
+  - Cálculo automático de IGV
   - Envío condicional (gratuito sobre X monto)
   - Resumen en tiempo real
 - **Flujo de checkout modular** listo para integración backend
 - **Diseño 100% responsive** (mobile-first)
 - **Gestión ágil** con Kanban en GitHub Projects
 
-### 🚧 **En Desarrollo/Próximamente**
-- **Backend** con Node.js/Express (en desarrollo)
-- **Base de datos** PostgreSQL (esquema diseñado)
-- **Panel de administración** (planeado)
-- **Integración de pagos** Stripe/MercadoPago (pendiente)
+## **🚧 Estado actual**
+
+Frontend en producción. Backend en desarrollo (Node.js + Express + PostgreSQL).
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
 ### Frontend (En producción)
-- **React 18** con Vite (configuración optimizada)
-- **Tailwind CSS** para estilos utilitarios y responsive design
-- **React Router DOM** para navegación SPA
-- **Context API + Hooks** para gestión de estado (carrito, productos)
-- **Vercel** para despliegue y hosting
-
-### Backend (En desarrollo)
-- **Node.js + Express** para API REST
-- **PostgreSQL/MySQL** para base de datos
-- **JWT** para autenticación
-- **Prisma ORM** para gestión de base de datos
+- React 18 + Vite
+- Tailwind CSS
+- React Router DOM para navegación SPA
+- Context API + Hooks 
+- Vercel (deploy)
 
 ---
 
@@ -80,7 +79,7 @@ Este proyecto es un **ejemplo de desarrollo ágil aplicado**:
 
 ---
 
-## 🎨 Características Destacadas
+## 🧠 Enfoque del proyecto
 
 ### 1. **Experiencia de Usuario Centrada en Conversión**
 - Tablas de tallas específicas por tipo de producto para reducir devoluciones.
